@@ -1,0 +1,56 @@
+<div class="demo-page">
+  <header class="demo-header">
+    <a routerLink="/" class="back-link">← Back</a>
+    <h1>📋 Smart Datatable</h1>
+    <p>AI-native data tables with natural language queries, smart filtering, and export capabilities.</p>
+  </header>
+
+  <app-api-key-warning featureName="Smart Datatable"></app-api-key-warning>
+
+  <section class="demo-section">
+    <h2>Interactive Demo</h2>
+    @if (hasAPIKey) {
+      <div class="demo-content">
+        <p class="hint">Try asking: "Show me all admins" or "Sort by name"</p>
+        <ai-smart-datatable
+          [data]="data"
+          [columns]="columns"
+          [pageSize]="5"
+          [aiQueries]="true"
+          [exportable]="true"
+          (rowClick)="onRowClick($event)">
+        </ai-smart-datatable>
+      </div>
+    } @else {
+      <div class="disabled-overlay">
+        <div class="disabled-content">
+          <span class="lock-icon">🔒</span>
+          <p>Configure an API key to enable this demo</p>
+        </div>
+      </div>
+    }
+  </section>
+
+  <section class="code-section">
+    <h2>Code Example</h2>
+    <pre><code>import &#123; SmartDatatableComponent, ColumnDef &#125; from '&#64;angularai/smart-datatable';
+
+columns: ColumnDef[] = [
+  &#123; key: 'name', header: 'Name', sortable: true &#125;,
+  &#123; key: 'email', header: 'Email', sortable: true &#125;
+];
+
+&#64;Component(&#123;
+  imports: [SmartDatatableComponent],
+  template: `
+    &lt;ai-smart-datatable
+      [data]="data"
+      [columns]="columns"
+      [aiQueries]="true"&gt;
+    &lt;/ai-smart-datatable&gt;
+  `
+&#125;)
+export class MyComponent &#123;&#125;</code></pre>
+  </section>
+</div>
+

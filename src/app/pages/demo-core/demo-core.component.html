@@ -1,0 +1,71 @@
+<div class="demo-page">
+  <header class="demo-header">
+    <a routerLink="/" class="back-link">← Back</a>
+    <h1>🧠 Core - AI Client Service</h1>
+    <p>The foundation of AngularAI - a multi-provider AI client that supports OpenAI, Claude, Gemini, and custom providers.</p>
+  </header>
+
+  <app-api-key-warning featureName="AI Client"></app-api-key-warning>
+
+  <section class="demo-section">
+    <h2>Basic Usage</h2>
+    @if (hasAPIKey) {
+      <div class="demo-content">
+        <div class="input-group">
+          <textarea
+            [(ngModel)]="prompt"
+            placeholder="Enter your prompt..."
+            rows="4"></textarea>
+          <div class="button-group">
+            <button (click)="sendPrompt()" [disabled]="isLoading">
+              {{ isLoading ? 'Processing...' : 'Send (Regular)' }}
+            </button>
+            <button (click)="sendStreamingPrompt()" [disabled]="isLoading" class="secondary">
+              {{ isLoading ? 'Streaming...' : 'Send (Streaming)' }}
+            </button>
+          </div>
+        </div>
+
+        @if (response) {
+          <div class="response-box">
+            <h3>Response:</h3>
+            <p>{{ response }}</p>
+          </div>
+        }
+
+        @if (streamedResponse) {
+          <div class="response-box streaming">
+            <h3>Streamed Response:</h3>
+            <p>{{ streamedResponse }}</p>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="disabled-overlay">
+        <div class="disabled-content">
+          <span class="lock-icon">🔒</span>
+          <p>Configure an API key to enable this demo</p>
+        </div>
+      </div>
+    }
+  </section>
+
+  <section class="code-section">
+    <h2>Code Example</h2>
+    <pre><code>import &#123; AIClientService &#125; from '&#64;angularai/core';
+
+// Inject the service
+constructor(private aiClient: AIClientService) &#123;&#125;
+
+// Simple ask
+this.aiClient.ask('What is Angular?').subscribe(response => &#123;
+  console.log(response);
+&#125;);
+
+// Streaming response
+this.aiClient.askStream('Tell me a story').subscribe(chunk => &#123;
+  this.text += chunk;
+&#125;);</code></pre>
+  </section>
+</div>
+

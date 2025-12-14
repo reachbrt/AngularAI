@@ -1,0 +1,65 @@
+<div class="demo-page">
+  <header class="demo-header">
+    <a routerLink="/" class="back-link">← Back</a>
+    <h1>🎤 Voice Actions</h1>
+    <p>Voice command processing with AI-powered intent recognition and natural language understanding.</p>
+  </header>
+
+  <app-api-key-warning featureName="Voice Actions"></app-api-key-warning>
+
+  <section class="demo-section">
+    <h2>Interactive Demo</h2>
+    @if (hasAPIKey) {
+      <div class="demo-content">
+        <p class="hint">Click the microphone and try saying: "go home", "search", or "help"</p>
+
+        <div class="voice-demo">
+          <ai-voice-button
+            (transcript)="onTranscript($event)"
+            (command)="onCommand($event)">
+          </ai-voice-button>
+        </div>
+
+        @if (lastTranscript) {
+          <div class="transcript-box">
+            <strong>Transcript:</strong> "{{ lastTranscript }}"
+          </div>
+        }
+
+        @if (lastCommand) {
+          <div class="command-box">
+            <strong>Command Matched:</strong> {{ lastCommand.action }} - {{ lastCommand.description }}
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="disabled-overlay">
+        <div class="disabled-content">
+          <span class="lock-icon">🔒</span>
+          <p>Configure an API key to enable this demo</p>
+        </div>
+      </div>
+    }
+  </section>
+
+  <section class="code-section">
+    <h2>Code Example</h2>
+    <pre><code>import &#123; VoiceButtonComponent, VoiceActionsService &#125; from '&#64;angularai/voice-actions';
+
+&#64;Component(&#123;
+  imports: [VoiceButtonComponent],
+  template: `
+    &lt;ai-voice-button
+      (transcript)="onTranscript($event)"
+      (command)="onCommand($event)"&gt;
+    &lt;/ai-voice-button&gt;
+  `
+&#125;)
+export class MyComponent &#123;
+  constructor(private voice: VoiceActionsService) &#123;
+    voice.registerCommand(&#123; phrase: 'search', action: 'open_search' &#125;);
+  &#125;
+&#125;</code></pre>
+  </section>
+</div>
+

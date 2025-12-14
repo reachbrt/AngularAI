@@ -1,0 +1,116 @@
+<div class="demo-page">
+  <header class="demo-header">
+    <a routerLink="/" class="back-link">← Back</a>
+    <h1>🔄 Spin 360</h1>
+    <p>Interactive 360° product viewer with drag-to-rotate, zoom, and <strong>AI-powered 360° generation</strong>.</p>
+  </header>
+
+  <app-api-key-warning featureName="AI 360 Generation" [compact]="true"></app-api-key-warning>
+
+  <!-- Tab Navigation -->
+  <div class="tab-nav">
+    <button
+      [class.active]="activeTab === 'viewer'"
+      (click)="activeTab = 'viewer'">
+      👁️ 360° Viewer
+    </button>
+    <button
+      [class.active]="activeTab === 'generator'"
+      (click)="activeTab = 'generator'">
+      ✨ AI Generator
+    </button>
+  </div>
+
+  <!-- Viewer Tab -->
+  @if (activeTab === 'viewer') {
+    <section class="demo-section">
+      <h2>Interactive 360° Viewer</h2>
+      <div class="demo-content">
+        <p class="hint">Drag to rotate, scroll to zoom, click hotspots for details</p>
+
+        @if (generationComplete && generatedImages.length > 0) {
+          <div class="ai-badge">
+            <span>✨ AI Generated</span>
+            <button class="reset-btn" (click)="resetGeneration()">Reset</button>
+          </div>
+        }
+
+        <ai-spin-viewer
+          [images]="currentImages"
+          [hotspots]="hotspots"
+          [autoRotate]="false"
+          [zoomable]="true"
+          [showControls]="true"
+          (frameChange)="onFrameChange($event)"
+          (hotspotClick)="onHotspotClick($event)">
+        </ai-spin-viewer>
+      </div>
+    </section>
+  }
+
+  <!-- Generator Tab -->
+  @if (activeTab === 'generator') {
+    <section class="demo-section">
+      <h2>✨ AI 360° Generator</h2>
+      <p class="section-desc">
+        Upload a single image and let AI generate a complete 360° rotating view of the object.
+        The AI will analyze the image, detect the main object, and synthesize views from multiple angles.
+      </p>
+
+      @if (hasAPIKey) {
+        <div class="generator-wrapper">
+          <ai-spin-generator
+            [numAngles]="8"
+            [generateGif]="true"
+            [gifFrameDelay]="150"
+            imageSize="1024x1024"
+            (generationComplete)="onGenerationComplete($event)"
+            (imagesGenerated)="onImagesGenerated($event)"
+            (gifGenerated)="onGifGenerated($event)">
+          </ai-spin-generator>
+        </div>
+
+        @if (generationComplete && generatedImages.length > 0) {
+          <div class="success-message">
+            <p>✅ 360° view with GIF generated! Switch to the <strong>Viewer</strong> tab or hover over the GIF to preview.</p>
+            <button class="view-btn" (click)="activeTab = 'viewer'">View 360° →</button>
+          </div>
+        }
+      } @else {
+        <div class="disabled-overlay">
+          <div class="disabled-content">
+            <span class="lock-icon">🔒</span>
+            <p>Configure an API key to enable AI 360° generation</p>
+            <a routerLink="/settings" class="settings-link">Go to Settings →</a>
+          </div>
+        </div>
+      }
+    </section>
+  }
+
+  <section class="code-section">
+    <h2>Code Example</h2>
+    <pre><code>import &#123; SpinViewerComponent, SpinGeneratorComponent &#125; from '&#64;angularai/spin-360';
+
+// Basic 360 Viewer
+&lt;ai-spin-viewer
+  [images]="images"
+  [autoRotate]="true"
+  [zoomable]="true"
+  (frameChange)="onFrame($event)"&gt;
+&lt;/ai-spin-viewer&gt;
+
+// AI 360 Generator with GIF output
+// Generates 360° views from a single image
+// Outputs a hover-to-play GIF
+&lt;ai-spin-generator
+  [numAngles]="8"
+  [generateGif]="true"
+  [gifFrameDelay]="150"
+  imageSize="1024x1024"
+  (imagesGenerated)="onImages($event)"
+  (gifGenerated)="onGif($event)"&gt;
+&lt;/ai-spin-generator&gt;</code></pre>
+  </section>
+</div>
+

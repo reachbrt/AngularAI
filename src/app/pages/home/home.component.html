@@ -1,0 +1,83 @@
+<div class="home">
+  <header class="hero">
+    <div class="hero-nav">
+      <a routerLink="/settings" class="settings-link">⚙️ Settings</a>
+    </div>
+    <h1>🤖 AngularAI</h1>
+    <p class="tagline">A comprehensive suite of AI-powered Angular components</p>
+    <p class="description">
+      Explore our collection of 13 AI-native libraries designed to bring intelligent features
+      to your Angular applications with minimal effort.
+    </p>
+  </header>
+
+  <!-- API Key Status Banner -->
+  <section class="api-status" [class.configured]="hasAPIKey">
+    @if (hasAPIKey) {
+      <div class="status-content">
+        <span class="status-icon">✓</span>
+        <span>Using <strong>{{ currentProvider }}</strong> provider</span>
+        <a routerLink="/settings" class="change-link">Change settings</a>
+      </div>
+    } @else {
+      <div class="status-content">
+        <span class="status-icon">🔑</span>
+        <span><strong>API Key Required</strong> - Click any package to configure</span>
+        <a routerLink="/settings" class="setup-link">Or go to Settings →</a>
+      </div>
+    }
+  </section>
+
+  <section class="demos-grid">
+    @for (demo of demos; track demo.route) {
+      <a
+        [routerLink]="demo.route"
+        class="demo-card"
+        [class.requires-key]="demo.requiresAI && !hasAPIKey"
+        (click)="onDemoClick(demo, $event)"
+      >
+        <span class="demo-icon">{{ demo.icon }}</span>
+        <h3>{{ demo.title }}</h3>
+        <p>{{ demo.description }}</p>
+        @if (demo.requiresAI && !hasAPIKey) {
+          <span class="key-required-badge">🔑 API Key Required</span>
+        }
+      </a>
+    }
+  </section>
+
+  <section class="features">
+    <h2>Key Features</h2>
+    <div class="features-grid">
+      <div class="feature">
+        <span class="feature-icon">🔌</span>
+        <h4>Multi-Provider Support</h4>
+        <p>Works with OpenAI, Claude, Gemini, and custom providers</p>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">📦</span>
+        <h4>Modular Design</h4>
+        <p>Import only what you need, tree-shakeable packages</p>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">🎨</span>
+        <h4>Customizable</h4>
+        <p>Fully styled components with easy theming</p>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">⚡</span>
+        <h4>Standalone Components</h4>
+        <p>Modern Angular 17+ standalone component architecture</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- API Key Modal -->
+@if (showApiKeyModal) {
+  <app-api-key-modal
+    (close)="onModalClose()"
+    (saved)="onApiKeySaved()"
+  ></app-api-key-modal>
+}
+

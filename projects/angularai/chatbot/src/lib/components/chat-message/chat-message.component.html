@@ -1,0 +1,22 @@
+<div class="message" [class.user]="isUser" [class.assistant]="isAssistant" [class.streaming]="message.isStreaming">
+  <div class="message-header">
+    <span class="role">{{ roleLabel }}</span>
+    @if (showTimestamp) {
+      <span class="timestamp">{{ formattedTime }}</span>
+    }
+  </div>
+  
+  <div class="message-content">
+    {{ message.content }}
+    @if (message.isStreaming) {
+      <span class="cursor">▋</span>
+    }
+  </div>
+
+  @if (message.error) {
+    <div class="message-error">
+      ⚠️ {{ message.error }}
+    </div>
+  }
+</div>
+

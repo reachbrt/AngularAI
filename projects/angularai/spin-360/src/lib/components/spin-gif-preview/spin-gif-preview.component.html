@@ -1,0 +1,55 @@
+<div 
+  class="gif-preview"
+  (mouseenter)="onMouseEnter()"
+  (mouseleave)="onMouseLeave()">
+  
+  <!-- Main Image/GIF Display -->
+  <div class="preview-container">
+    @if (displayImage) {
+      <img 
+        [src]="displayImage" 
+        [class.is-gif]="isHovering && gifUrl"
+        alt="360° preview" />
+    }
+
+    <!-- Hover indicator -->
+    @if (showGifIndicator) {
+      <div class="gif-indicator">
+        <span class="gif-badge">GIF</span>
+        <span class="hover-text">Hover to play</span>
+      </div>
+    }
+
+    <!-- Generating overlay -->
+    @if (isGenerating) {
+      <div class="generating-overlay">
+        <div class="spinner"></div>
+        <div class="progress-info">
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="progress"></div>
+          </div>
+          <span class="progress-text">{{ statusMessage }}</span>
+        </div>
+      </div>
+    }
+
+    <!-- Error state -->
+    @if (hasError) {
+      <div class="error-overlay">
+        <span class="error-icon">❌</span>
+        <span>Failed to create GIF</span>
+        <button class="retry-btn" (click)="generateGif()">Retry</button>
+      </div>
+    }
+  </div>
+
+  <!-- Controls -->
+  @if (gifUrl && showDownload) {
+    <div class="controls">
+      <button class="download-btn" (click)="downloadGif()">
+        ⬇️ Download GIF
+      </button>
+    </div>
+  }
+</div>
+

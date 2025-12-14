@@ -1,0 +1,47 @@
+<div class="demo-page">
+  <header class="demo-header">
+    <a routerLink="/" class="back-link">← Back</a>
+    <h1>💬 Chatbot</h1>
+    <p>A complete AI-powered chat interface with message history, streaming responses, and customizable styling.</p>
+  </header>
+
+  <app-api-key-warning featureName="Chatbot"></app-api-key-warning>
+
+  <section class="demo-section">
+    <h2>Interactive Demo</h2>
+    @if (hasAPIKey) {
+      <div class="chat-container">
+        <ai-chat-window
+          title="AI Assistant"
+          placeholder="Ask me anything..."
+          (messageSent)="onMessageSent($event)">
+        </ai-chat-window>
+      </div>
+    } @else {
+      <div class="disabled-overlay">
+        <div class="disabled-content">
+          <span class="lock-icon">🔒</span>
+          <p>Configure an API key to enable this demo</p>
+        </div>
+      </div>
+    }
+  </section>
+
+  <section class="code-section">
+    <h2>Code Example</h2>
+    <pre><code>import &#123; ChatWindowComponent &#125; from '&#64;angularai/chatbot';
+
+&#64;Component(&#123;
+  imports: [ChatWindowComponent],
+  template: `
+    &lt;ai-chat-window
+      title="AI Assistant"
+      placeholder="Ask me anything..."
+      (messageSent)="onMessage($event)"&gt;
+    &lt;/ai-chat-window&gt;
+  `
+&#125;)
+export class MyComponent &#123;&#125;</code></pre>
+  </section>
+</div>
+

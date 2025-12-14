@@ -1,0 +1,22 @@
+<div class="emotion-aware-container" [class]="'theme-' + (adaptation?.theme || 'neutral')">
+  @if (showIndicator && currentEmotion) {
+    <div class="emotion-indicator">
+      <span class="emotion-emoji">{{ getEmotionEmoji() }}</span>
+      <span class="emotion-label">{{ currentEmotion.primary }}</span>
+      <span class="emotion-confidence">{{ (currentEmotion.confidence * 100) | number:'1.0-0' }}%</span>
+    </div>
+  }
+
+  <div class="content">
+    <ng-content></ng-content>
+  </div>
+
+  @if (showSuggestions && adaptation?.suggestions?.length) {
+    <div class="suggestions">
+      @for (suggestion of adaptation!.suggestions!; track suggestion) {
+        <span class="suggestion">{{ suggestion }}</span>
+      }
+    </div>
+  }
+</div>
+

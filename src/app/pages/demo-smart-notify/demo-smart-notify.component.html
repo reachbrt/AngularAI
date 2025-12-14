@@ -1,0 +1,53 @@
+<div class="demo-page">
+  <header class="demo-header">
+    <a routerLink="/" class="back-link">← Back</a>
+    <h1>🔔 Smart Notify</h1>
+    <p>Intelligent notification system with AI-powered insights and smart grouping.</p>
+  </header>
+
+  <app-api-key-warning featureName="Smart Notify"></app-api-key-warning>
+
+  <section class="demo-section">
+    <h2>Interactive Demo</h2>
+    @if (hasAPIKey) {
+      <div class="demo-content">
+        <p class="hint">Click the buttons to trigger different notification types</p>
+        <div class="button-grid">
+          <button class="btn info" (click)="showInfo()">ℹ️ Info</button>
+          <button class="btn success" (click)="showSuccess()">✅ Success</button>
+          <button class="btn warning" (click)="showWarning()">⚠️ Warning</button>
+          <button class="btn error" (click)="showError()">❌ Error</button>
+          <button class="btn ai" (click)="showAI()">🤖 AI Insight</button>
+        </div>
+      </div>
+    } @else {
+      <div class="disabled-overlay">
+        <div class="disabled-content">
+          <span class="lock-icon">🔒</span>
+          <p>Configure an API key to enable this demo</p>
+        </div>
+      </div>
+    }
+  </section>
+
+  <section class="code-section">
+    <h2>Code Example</h2>
+    <pre><code>import &#123; SmartNotifyService, NotificationContainerComponent &#125; from '&#64;angularai/smart-notify';
+
+&#64;Component(&#123;
+  imports: [NotificationContainerComponent],
+  template: `&lt;ai-notification-container&gt;&lt;/ai-notification-container&gt;`
+&#125;)
+export class MyComponent &#123;
+  constructor(private notify: SmartNotifyService) &#123;&#125;
+
+  showNotification() &#123;
+    this.notify.success('Done!', 'Task completed.');
+    this.notify.ai('Insight', 'AI suggestion here.');
+  &#125;
+&#125;</code></pre>
+  </section>
+</div>
+
+<ai-notification-container></ai-notification-container>
+

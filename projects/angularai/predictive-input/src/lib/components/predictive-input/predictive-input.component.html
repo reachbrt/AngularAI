@@ -1,0 +1,41 @@
+<div class="predictive-input-container">
+  <div class="input-wrapper">
+    <input
+      type="text"
+      class="main-input"
+      [value]="value"
+      [placeholder]="placeholder"
+      (input)="onInput($event)"
+      (keydown)="onKeyDown($event)"
+      autocomplete="off"
+    />
+    
+    @if (showGhostText && ghostText) {
+      <div class="ghost-text">
+        <span class="typed">{{ value }}</span><span class="prediction">{{ ghostText }}</span>
+      </div>
+    }
+
+    @if (isLoading) {
+      <div class="loading-indicator"></div>
+    }
+  </div>
+
+  @if (predictions.length > 1) {
+    <ul class="predictions-list">
+      @for (prediction of predictions; track prediction.text; let i = $index) {
+        <li 
+          class="prediction-item"
+          (click)="acceptPrediction(prediction)">
+          <span class="prediction-text">{{ value }}{{ prediction.text }}</span>
+          <span class="prediction-confidence">{{ (prediction.confidence * 100) | number:'1.0-0' }}%</span>
+        </li>
+      }
+    </ul>
+  }
+
+  @if (ghostText) {
+    <div class="hint">Press Tab to accept</div>
+  }
+</div>
+

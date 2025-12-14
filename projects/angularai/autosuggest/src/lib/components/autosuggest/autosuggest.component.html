@@ -1,0 +1,40 @@
+<div class="autosuggest-container">
+  <div class="input-wrapper">
+    <input
+      type="text"
+      class="autosuggest-input"
+      [value]="value"
+      [placeholder]="placeholder"
+      (input)="onInput($event)"
+      (focus)="onFocus()"
+      (blur)="onBlur()"
+      (keydown)="onKeyDown($event)"
+      autocomplete="off"
+    />
+    
+    @if (isLoading) {
+      <div class="loading-spinner"></div>
+    }
+  </div>
+
+  @if (showSuggestions && suggestions.length > 0) {
+    <ul class="suggestions-list">
+      @for (suggestion of suggestions; track suggestion.id; let i = $index) {
+        <li
+          class="suggestion-item"
+          [class.selected]="i === selectedIndex"
+          (click)="selectSuggestion(suggestion)"
+          (mouseenter)="selectedIndex = i">
+          <span class="suggestion-text">{{ suggestion.text }}</span>
+          @if (suggestion.category) {
+            <span class="suggestion-category">{{ suggestion.category }}</span>
+          }
+          @if (suggestion.score) {
+            <span class="suggestion-score">{{ (suggestion.score * 100) | number:'1.0-0' }}%</span>
+          }
+        </li>
+      }
+    </ul>
+  }
+</div>
+

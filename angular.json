@@ -1,0 +1,510 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "angularai": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss",
+          "skipTests": true
+        },
+        "@schematics/angular:class": {
+          "skipTests": true
+        },
+        "@schematics/angular:directive": {
+          "skipTests": true
+        },
+        "@schematics/angular:guard": {
+          "skipTests": true
+        },
+        "@schematics/angular:interceptor": {
+          "skipTests": true
+        },
+        "@schematics/angular:pipe": {
+          "skipTests": true
+        },
+        "@schematics/angular:resolver": {
+          "skipTests": true
+        },
+        "@schematics/angular:service": {
+          "skipTests": true
+        }
+      },
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "browser": "src/main.ts",
+            "polyfills": [
+              "zone.js"
+            ],
+            "tsConfig": "tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "public"
+              }
+            ],
+            "styles": [
+              "src/styles.scss"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "angularai:build:production"
+            },
+            "development": {
+              "buildTarget": "angularai:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular/build:extract-i18n"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
+            "tsConfig": "tsconfig.spec.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "public"
+              }
+            ],
+            "styles": [
+              "src/styles.scss"
+            ]
+          }
+        }
+      }
+    },
+    "@angularai/core": {
+      "projectType": "library",
+      "root": "projects/angularai/core",
+      "sourceRoot": "projects/angularai/core/src",
+      "prefix": "ai",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/angularai/core/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/angularai/core/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/angularai/core/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
+    },
+    "@angularai/chatbot": {
+      "projectType": "library",
+      "root": "projects/angularai/chatbot",
+      "sourceRoot": "projects/angularai/chatbot/src",
+      "prefix": "ai",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/angularai/chatbot/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/angularai/chatbot/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/angularai/chatbot/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
+    },
+    "@angularai/autosuggest": {
+      "projectType": "library",
+      "root": "projects/angularai/autosuggest",
+      "sourceRoot": "projects/angularai/autosuggest/src",
+      "prefix": "ai",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/angularai/autosuggest/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/angularai/autosuggest/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/angularai/autosuggest/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
+    },
+    "@angularai/smartform": {
+      "projectType": "library",
+      "root": "projects/angularai/smartform",
+      "sourceRoot": "projects/angularai/smartform/src",
+      "prefix": "ai",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/angularai/smartform/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/angularai/smartform/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/angularai/smartform/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
+    },
+    "@angularai/analytics": {
+      "projectType": "library",
+      "root": "projects/angularai/analytics",
+      "sourceRoot": "projects/angularai/analytics/src",
+      "prefix": "ai",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/angularai/analytics/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/angularai/analytics/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/angularai/analytics/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
+    },
+    "@angularai/image-caption": {
+      "projectType": "library",
+      "root": "projects/angularai/image-caption",
+      "sourceRoot": "projects/angularai/image-caption/src",
+      "prefix": "ai",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/angularai/image-caption/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/angularai/image-caption/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/angularai/image-caption/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
+    },
+    "@angularai/emotion-ui": {
+      "projectType": "library",
+      "root": "projects/angularai/emotion-ui",
+      "sourceRoot": "projects/angularai/emotion-ui/src",
+      "prefix": "ai",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/angularai/emotion-ui/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/angularai/emotion-ui/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/angularai/emotion-ui/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
+    },
+    "@angularai/doc-intelligence": {
+      "projectType": "library",
+      "root": "projects/angularai/doc-intelligence",
+      "sourceRoot": "projects/angularai/doc-intelligence/src",
+      "prefix": "ai",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/angularai/doc-intelligence/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/angularai/doc-intelligence/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/angularai/doc-intelligence/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
+    },
+    "@angularai/predictive-input": {
+      "projectType": "library",
+      "root": "projects/angularai/predictive-input",
+      "sourceRoot": "projects/angularai/predictive-input/src",
+      "prefix": "ai",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/angularai/predictive-input/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/angularai/predictive-input/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/angularai/predictive-input/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
+    },
+    "@angularai/smart-notify": {
+      "projectType": "library",
+      "root": "projects/angularai/smart-notify",
+      "sourceRoot": "projects/angularai/smart-notify/src",
+      "prefix": "ai",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/angularai/smart-notify/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/angularai/smart-notify/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/angularai/smart-notify/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
+    },
+    "@angularai/voice-actions": {
+      "projectType": "library",
+      "root": "projects/angularai/voice-actions",
+      "sourceRoot": "projects/angularai/voice-actions/src",
+      "prefix": "ai",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/angularai/voice-actions/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/angularai/voice-actions/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/angularai/voice-actions/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
+    },
+    "@angularai/smart-datatable": {
+      "projectType": "library",
+      "root": "projects/angularai/smart-datatable",
+      "sourceRoot": "projects/angularai/smart-datatable/src",
+      "prefix": "ai",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/angularai/smart-datatable/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/angularai/smart-datatable/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/angularai/smart-datatable/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
+    },
+    "@angularai/spin-360": {
+      "projectType": "library",
+      "root": "projects/angularai/spin-360",
+      "sourceRoot": "projects/angularai/spin-360/src",
+      "prefix": "ai",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/angularai/spin-360/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/angularai/spin-360/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/angularai/spin-360/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,56 @@
+<div class="demo-page">
+  <header class="demo-header">
+    <a routerLink="/" class="back-link">← Back</a>
+    <h1>⌨️ Predictive Input</h1>
+    <p>AI-powered predictive text input with ghost text suggestions and Tab to complete.</p>
+  </header>
+
+  <app-api-key-warning featureName="Predictive Input"></app-api-key-warning>
+
+  <section class="demo-section">
+    <h2>Interactive Demo</h2>
+    @if (hasAPIKey) {
+      <div class="demo-content">
+        <p class="hint">Start typing and press Tab to accept the prediction</p>
+        <ai-predictive-input
+          [(value)]="inputValue"
+          placeholder="Start typing a sentence..."
+          context="general writing"
+          (predictionAccepted)="onPredictionAccepted($event)">
+        </ai-predictive-input>
+
+        @if (lastPrediction) {
+          <div class="prediction-info">
+            <strong>Last accepted:</strong> "{{ lastPrediction.text }}"
+            ({{ (lastPrediction.confidence * 100) | number:'1.0-0' }}% confidence)
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="disabled-overlay">
+        <div class="disabled-content">
+          <span class="lock-icon">🔒</span>
+          <p>Configure an API key to enable this demo</p>
+        </div>
+      </div>
+    }
+  </section>
+
+  <section class="code-section">
+    <h2>Code Example</h2>
+    <pre><code>import &#123; PredictiveInputComponent &#125; from '&#64;angularai/predictive-input';
+
+&#64;Component(&#123;
+  imports: [PredictiveInputComponent],
+  template: `
+    &lt;ai-predictive-input
+      [(value)]="text"
+      placeholder="Type here..."
+      (predictionAccepted)="onAccept($event)"&gt;
+    &lt;/ai-predictive-input&gt;
+  `
+&#125;)
+export class MyComponent &#123;&#125;</code></pre>
+  </section>
+</div>
+

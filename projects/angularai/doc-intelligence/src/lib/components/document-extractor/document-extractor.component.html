@@ -1,0 +1,76 @@
+<div class="document-extractor">
+  <div class="input-section">
+    <label class="file-upload">
+      <input type="file" accept=".txt,.pdf,.doc,.docx" (change)="onFileSelected($event)" hidden />
+      <span class="upload-btn">📄 Upload Document</span>
+    </label>
+    
+    <div class="divider">or</div>
+    
+    <textarea 
+      class="text-input"
+      placeholder="Paste document text here..."
+      [value]="documentText"
+      (input)="onTextInput($event)"
+      rows="6">
+    </textarea>
+    
+    <button class="process-btn" (click)="processText()" [disabled]="isProcessing || !documentText.trim()">
+      @if (isProcessing) {
+        <span class="spinner"></span> Processing...
+      } @else {
+        🤖 Extract Data
+      }
+    </button>
+  </div>
+
+  @if (result) {
+    <div class="results-section">
+      @if (result.documentType) {
+        <div class="doc-type">
+          <strong>Document Type:</strong> {{ result.documentType }}
+        </div>
+      }
+
+      @if (result.fields.length > 0) {
+        <div class="fields">
+          <h4>Extracted Fields</h4>
+          @for (field of result.fields; track field.name) {
+            <div class="field-item">
+              <span class="field-name">{{ field.name }}</span>
+              <span class="field-value">{{ field.value }}</span>
+              <span class="field-type">{{ field.type }}</span>
+            </div>
+          }
+        </div>
+      }
+
+      @if (result.tables?.length) {
+        <div class="tables">
+          <h4>Extracted Tables</h4>
+          @for (table of result.tables; track $index) {
+            <table class="data-table">
+              <thead>
+                <tr>
+                  @for (header of table.headers; track header) {
+                    <th>{{ header }}</th>
+                  }
+                </tr>
+              </thead>
+              <tbody>
+                @for (row of table.rows; track $index) {
+                  <tr>
+                    @for (cell of row; track $index) {
+                      <td>{{ cell }}</td>
+                    }
+                  </tr>
+                }
+              </tbody>
+            </table>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>
+

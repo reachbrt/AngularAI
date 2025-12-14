@@ -1,0 +1,26 @@
+<div class="voice-button-container">
+  <button 
+    class="voice-button"
+    [class.listening]="isListening"
+    [disabled]="!isSupported"
+    (click)="toggleListening()"
+    [title]="isSupported ? (isListening ? 'Stop listening' : 'Start voice command') : 'Voice not supported'">
+    
+    @if (isListening) {
+      <div class="pulse-ring"></div>
+    }
+    
+    <span class="mic-icon">🎤</span>
+  </button>
+
+  @if (currentTranscript && isListening) {
+    <div class="transcript-bubble">
+      {{ currentTranscript }}
+    </div>
+  }
+
+  @if (!isSupported) {
+    <div class="not-supported">Voice commands not supported in this browser</div>
+  }
+</div>
+

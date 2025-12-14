@@ -1,0 +1,34 @@
+<div class="notification-container" [ngClass]="getPositionClass()">
+  @for (notification of notifications; track notification.id) {
+    <div class="notification" [class]="'type-' + notification.type" [class.read]="notification.read">
+      <div class="notification-icon">{{ getIcon(notification.type) }}</div>
+      
+      <div class="notification-content">
+        <div class="notification-header">
+          <span class="notification-title">{{ notification.title }}</span>
+          <button class="dismiss-btn" (click)="dismiss(notification.id)">×</button>
+        </div>
+        
+        <p class="notification-message">{{ notification.message }}</p>
+        
+        @if (notification.aiContext) {
+          <p class="ai-context">💡 {{ notification.aiContext }}</p>
+        }
+        
+        @if (notification.actions?.length) {
+          <div class="notification-actions">
+            @for (action of notification.actions; track action.action) {
+              <button 
+                class="action-btn"
+                [class.primary]="action.primary"
+                (click)="onAction(notification, action.action)">
+                {{ action.label }}
+              </button>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>
+

@@ -1,0 +1,58 @@
+<div class="demo-page">
+  <header class="demo-header">
+    <a routerLink="/" class="back-link">← Back</a>
+    <h1>📝 Smart Form</h1>
+    <p>AI-powered form validation, auto-correction, and intelligent field suggestions.</p>
+  </header>
+
+  <app-api-key-warning featureName="Smart Form"></app-api-key-warning>
+
+  <section class="demo-section">
+    <h2>Interactive Demo</h2>
+    @if (hasAPIKey) {
+      <div class="demo-content">
+        <ai-smart-form
+          [schema]="formSchema"
+          submitLabel="Submit Form"
+          (formSubmit)="onFormSubmit($event)">
+        </ai-smart-form>
+
+        @if (formData | json) {
+          <div class="form-output">
+            <h3>Submitted Data:</h3>
+            <pre>{{ formData | json }}</pre>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="disabled-overlay">
+        <div class="disabled-content">
+          <span class="lock-icon">🔒</span>
+          <p>Configure an API key to enable this demo</p>
+        </div>
+      </div>
+    }
+  </section>
+
+  <section class="code-section">
+    <h2>Code Example</h2>
+    <pre><code>import &#123; SmartFormComponent, FieldSchema &#125; from '&#64;angularai/smartform';
+
+schema: FieldSchema[] = [
+  &#123; name: 'email', label: 'Email', type: 'email', required: true &#125;,
+  &#123; name: 'message', label: 'Message', type: 'textarea' &#125;
+];
+
+&#64;Component(&#123;
+  imports: [SmartFormComponent],
+  template: `
+    &lt;ai-smart-form
+      [schema]="schema"
+      (formSubmit)="onSubmit($event)"&gt;
+    &lt;/ai-smart-form&gt;
+  `
+&#125;)
+export class MyComponent &#123;&#125;</code></pre>
+  </section>
+</div>
+

@@ -1,0 +1,160 @@
+<div class="spin-generator">
+  <div class="generator-content">
+    <!-- Upload Area -->
+    @if (!sourceImage) {
+      <div 
+        class="upload-zone"
+        [class.drag-over]="isDragOver"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+        (drop)="onDrop($event)">
+        <div class="upload-icon">📷</div>
+        <h3>Upload an Image</h3>
+        <p>Drag & drop an image here, or click to select</p>
+        <p class="hint">Supported: JPEG, PNG</p>
+        <input 
+          type="file" 
+          accept="image/jpeg,image/png" 
+          (change)="onFileSelected($event)" 
+          #fileInput />
+        <button class="upload-btn" (click)="fileInput.click()">Choose Image</button>
+      </div>
+    }
+
+    <!-- Preview & Configuration -->
+    @if (sourceImage && !isGenerating && !isComplete) {
+      <div class="preview-section">
+        <div class="preview-image">
+          <img [src]="sourceImage" alt="Source image" />
+          <span class="file-name">{{ sourceFileName }}</span>
+        </div>
+        
+        <div class="config-section">
+          <h3>🔄 Generate 360° View</h3>
+          <p>AI will analyze this image and generate views from multiple angles</p>
+          
+          <div class="form-group">
+            <label for="description">Object Description (optional)</label>
+            <textarea 
+              id="description"
+              [(ngModel)]="objectDescription"
+              placeholder="E.g., 'A white ceramic coffee mug with a blue handle'"
+              rows="2">
+            </textarea>
+            <small>Helps AI better understand the object for accurate generation</small>
+          </div>
+
+          <div class="form-group">
+            <label for="numAngles">Number of Angles</label>
+            <select id="numAngles" [(ngModel)]="numAngles">
+              <option [value]="4">4 angles (0°, 90°, 180°, 270°)</option>
+              <option [value]="8">8 angles (45° intervals)</option>
+            </select>
+          </div>
+
+          <div class="actions">
+            <button class="secondary-btn" (click)="reset()">Cancel</button>
+            <button class="primary-btn" (click)="generate360()">
+              ✨ Generate 360° Views
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Generating Progress -->
+    @if (isGenerating) {
+      <div class="generating-section">
+        <div class="progress-container">
+          <div class="spinner"></div>
+          <h3>Generating 360° Views...</h3>
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="progress"></div>
+          </div>
+          <p class="progress-text">{{ progress | number:'1.0-0' }}% complete</p>
+          
+          @if (objectInfo) {
+            <div class="object-info">
+              <strong>Detected: {{ objectInfo.name }}</strong>
+              <p>{{ objectInfo.description }}</p>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Error State -->
+    @if (hasError) {
+      <div class="error-section">
+        <div class="error-icon">❌</div>
+        <h3>Generation Failed</h3>
+        <p>{{ errorMessage }}</p>
+        <button class="primary-btn" (click)="reset()">Try Again</button>
+      </div>
+    }
+
+    <!-- Complete State -->
+    @if (isComplete && generatedImages.length > 0) {
+      <div class="complete-section">
+        <div class="success-header">
+          <span class="success-icon">✅</span>
+          <h3>360° View Generated!</h3>
+          @if (objectInfo) {
+            <p>{{ objectInfo.name }} - {{ generatedImages.length }} angles</p>
+          }
+        </div>
+
+        <!-- GIF Preview with Hover-to-Play -->
+        <div class="gif-section">
+          @if (isGeneratingGif) {
+            <div class="gif-generating">
+              <div class="mini-spinner"></div>
+              <span>Creating GIF... {{ gifProgress | number:'1.0-0' }}%</span>
+            </div>
+          }
+
+          @if (hasGif) {
+            <div class="gif-preview-container">
+              <div
+                class="gif-hover-wrapper"
+                (mouseenter)="isHoveringGif = true"
+                (mouseleave)="isHoveringGif = false">
+                <img
+                  class="static-frame"
+                  [src]="generatedImages[0]"
+                  [class.hidden]="isHoveringGif"
+                  alt="First frame - hover to play" />
+                <img
+                  class="gif-frame"
+                  [src]="gifUrl"
+                  [class.visible]="isHoveringGif"
+                  alt="360° rotating GIF" />
+                <div class="gif-overlay" [class.hidden]="isHoveringGif">
+                  <span class="gif-badge">GIF</span>
+                  <span class="hover-hint">Hover to play</span>
+                </div>
+              </div>
+              <button class="download-gif-btn" (click)="downloadGif()">
+                ⬇️ Download GIF
+              </button>
+            </div>
+          }
+        </div>
+
+        <div class="preview-grid">
+          @for (image of generatedImages; track $index; let i = $index) {
+            <div class="preview-thumb">
+              <img [src]="image" [alt]="'Angle ' + (generationState?.angles?.[i] || i * 45) + '°'" />
+              <span class="angle-label">{{ generationState?.angles?.[i] || i * 45 }}°</span>
+            </div>
+          }
+        </div>
+
+        <div class="actions">
+          <button class="secondary-btn" (click)="reset()">Generate New</button>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+

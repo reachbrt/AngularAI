@@ -1,0 +1,106 @@
+<div class="settings-page">
+  <header class="page-header">
+    <a routerLink="/" class="back-link">← Back to Home</a>
+    <h1>⚙️ API Settings</h1>
+    <p class="subtitle">Configure your AI provider API keys</p>
+  </header>
+
+  <div class="warning-box">
+    <span class="warning-icon">⚠️</span>
+    <div class="warning-content">
+      <strong>Security Notice</strong>
+      <p>API keys are stored in your browser's localStorage. Do not use production API keys on shared computers. 
+         These keys are never sent to our servers - all AI requests go directly to the provider APIs from your browser.</p>
+    </div>
+  </div>
+
+  <section class="settings-section">
+    <h2>Select AI Provider</h2>
+    <div class="provider-select">
+      <select [(ngModel)]="selectedProvider" (change)="onProviderChange()">
+        @for (provider of providers; track provider.id) {
+          <option [value]="provider.id">
+            {{ provider.name }}
+            @if (hasKeyForProvider(provider.id)) {
+              ✓
+            }
+          </option>
+        }
+      </select>
+    </div>
+
+    @if (!hasKeyForProvider(selectedProvider)) {
+      <p class="provider-info warning">
+        ⚠️ No API key configured for {{ getProviderName(selectedProvider) }}. Enter your key below.
+      </p>
+    }
+  </section>
+
+  <section class="settings-section">
+    <h2>API Keys</h2>
+    <div class="api-keys-list">
+      @for (provider of providers; track provider.id) {
+        <div class="api-key-item" [class.active]="selectedProvider === provider.id">
+          <div class="provider-header">
+            <label [for]="provider.id">{{ provider.name }}</label>
+            <span class="provider-description">{{ provider.description }}</span>
+          </div>
+          <div class="key-input-group">
+            <input
+              [id]="provider.id"
+              [type]="showKeys[provider.id] ? 'text' : 'password'"
+              [placeholder]="provider.placeholder"
+              [value]="getKeyValue(provider.id)"
+              (input)="setKeyValue(provider.id, $any($event.target).value)"
+              autocomplete="off"
+            />
+            <button 
+              type="button" 
+              class="toggle-visibility"
+              (click)="toggleShowKey(provider.id)"
+              [title]="showKeys[provider.id] ? 'Hide key' : 'Show key'">
+              {{ showKeys[provider.id] ? '👁️' : '👁️‍🗨️' }}
+            </button>
+          </div>
+          @if (hasKeyForProvider(provider.id)) {
+            <span class="key-status valid">✓ Key configured</span>
+          }
+        </div>
+      }
+    </div>
+  </section>
+
+  <section class="settings-actions">
+    <button class="btn-primary" (click)="saveSettings()">
+      💾 Save Settings
+    </button>
+    <button class="btn-danger" (click)="clearAllKeys()">
+      🗑️ Clear All Keys
+    </button>
+  </section>
+
+  @if (saveMessage) {
+    <div class="save-message">
+      {{ saveMessage }}
+    </div>
+  }
+
+  <section class="settings-section help-section">
+    <h2>How to Get API Keys</h2>
+    <div class="help-cards">
+      <div class="help-card">
+        <h4>OpenAI</h4>
+        <p>Visit <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com/api-keys</a></p>
+      </div>
+      <div class="help-card">
+        <h4>Anthropic Claude</h4>
+        <p>Visit <a href="https://console.anthropic.com/settings/keys" target="_blank">console.anthropic.com</a></p>
+      </div>
+      <div class="help-card">
+        <h4>Google Gemini</h4>
+        <p>Visit <a href="https://makersuite.google.com/app/apikey" target="_blank">makersuite.google.com</a></p>
+      </div>
+    </div>
+  </section>
+</div>
+

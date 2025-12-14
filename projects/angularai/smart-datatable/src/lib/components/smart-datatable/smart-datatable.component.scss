@@ -1,0 +1,142 @@
+.smart-datatable {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.query-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.query-input {
+  flex: 1;
+  padding: 12px 16px;
+  font-size: 14px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  outline: none;
+  &:focus { border-color: #007bff; }
+}
+
+.query-btn, .clear-btn {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.query-btn {
+  background: #007bff;
+  color: white;
+  &:hover:not(:disabled) { background: #0056b3; }
+  &:disabled { opacity: 0.6; }
+}
+
+.clear-btn {
+  background: #f5f5f5;
+  &:hover { background: #e0e0e0; }
+}
+
+.ai-explanation {
+  padding: 12px 16px;
+  background: #f0f7ff;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: #0056b3;
+}
+
+.table-container {
+  overflow-x: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+th {
+  background: #f5f5f5;
+  font-weight: 600;
+  font-size: 13px;
+  color: #666;
+  text-transform: uppercase;
+
+  &.sortable {
+    cursor: pointer;
+    user-select: none;
+    &:hover { background: #e8e8e8; }
+  }
+}
+
+.sort-icon {
+  margin-left: 4px;
+  font-size: 12px;
+}
+
+tbody tr {
+  cursor: pointer;
+  transition: background 0.15s;
+  &:hover { background: #f9f9f9; }
+  &:last-child td { border-bottom: none; }
+}
+
+td {
+  font-size: 14px;
+  color: #333;
+}
+
+.empty-message {
+  text-align: center;
+  color: #999;
+  padding: 40px;
+}
+
+.table-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  button {
+    padding: 8px 12px;
+    border: 1px solid #e0e0e0;
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+    &:hover:not(:disabled) { background: #f5f5f5; }
+    &:disabled { opacity: 0.5; cursor: not-allowed; }
+  }
+}
+
+.page-info {
+  font-size: 14px;
+  color: #666;
+  margin: 0 8px;
+}
+
+.export-btn {
+  padding: 8px 16px;
+  border: 1px solid #e0e0e0;
+  background: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  &:hover { background: #f5f5f5; }
+}
+

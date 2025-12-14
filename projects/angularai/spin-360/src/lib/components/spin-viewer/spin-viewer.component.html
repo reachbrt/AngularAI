@@ -1,0 +1,60 @@
+<div 
+  class="spin-viewer"
+  #container
+  (mousedown)="onMouseDown($event)"
+  (mousemove)="onMouseMove($event)"
+  (mouseup)="onMouseUp()"
+  (mouseleave)="onMouseUp()"
+  (wheel)="onWheel($event)"
+  [class.dragging]="isDragging">
+  
+  @if (isLoading) {
+    <div class="loading">
+      <div class="spinner"></div>
+      <span>Loading 360° view...</span>
+    </div>
+  } @else {
+    <div class="image-container" [style.transform]="'scale(' + zoom + ')'">
+      <img [src]="currentImage" alt="360 view" draggable="false" />
+      
+      @for (hotspot of visibleHotspots; track hotspot.id) {
+        <div 
+          class="hotspot"
+          [style.left.%]="hotspot.x"
+          [style.top.%]="hotspot.y"
+          [class.ai-generated]="hotspot.aiGenerated"
+          (click)="onHotspotClick(hotspot); $event.stopPropagation()">
+          <div class="hotspot-dot"></div>
+          <div class="hotspot-label">
+            <strong>{{ hotspot.label }}</strong>
+            @if (hotspot.description) {
+              <p>{{ hotspot.description }}</p>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  @if (showControls && !isLoading) {
+    <div class="controls">
+      <button (click)="prevFrame()" title="Previous">◀</button>
+      <button (click)="toggleAutoRotate()" [title]="autoRotateInterval ? 'Stop' : 'Auto-rotate'">
+        {{ autoRotateInterval ? '⏸' : '▶' }}
+      </button>
+      <button (click)="nextFrame()" title="Next">▶</button>
+      
+      @if (zoomable) {
+        <span class="divider">|</span>
+        <button (click)="zoom = zoom + 0.5" [disabled]="zoom >= maxZoom" title="Zoom in">🔍+</button>
+        <button (click)="zoom = zoom - 0.5" [disabled]="zoom <= 1" title="Zoom out">🔍-</button>
+        <button (click)="resetZoom()" [disabled]="zoom === 1" title="Reset zoom">↺</button>
+      }
+    </div>
+
+    <div class="frame-indicator">
+      {{ currentFrame + 1 }} / {{ images.length }}
+    </div>
+  }
+</div>
+

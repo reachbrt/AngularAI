@@ -1,0 +1,85 @@
+<form class="smart-form" (ngSubmit)="onSubmit()">
+  @for (field of schema; track field.name) {
+    <div class="form-field" [class.has-error]="hasError(field.name)">
+      <label class="field-label" [for]="field.name">
+        {{ field.label || field.name }}
+        @if (field.required) {
+          <span class="required">*</span>
+        }
+      </label>
+
+      @switch (field.type) {
+        @case ('textarea') {
+          <textarea
+            [id]="field.name"
+            class="field-input"
+            [placeholder]="field.placeholder || ''"
+            [ngModel]="formData[field.name]"
+            (ngModelChange)="onFieldChange(field, $event)"
+            (blur)="onFieldBlur(field)"
+            [name]="field.name"
+            rows="4">
+          </textarea>
+        }
+        @case ('select') {
+          <select
+            [id]="field.name"
+            class="field-input"
+            [ngModel]="formData[field.name]"
+            (ngModelChange)="onFieldChange(field, $event)"
+            (blur)="onFieldBlur(field)"
+            [name]="field.name">
+            <option value="">{{ field.placeholder || 'Select...' }}</option>
+            @for (option of field.options; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+        }
+        @default {
+          <input
+            [id]="field.name"
+            class="field-input"
+            [type]="field.type"
+            [placeholder]="field.placeholder || ''"
+            [ngModel]="formData[field.name]"
+            (ngModelChange)="onFieldChange(field, $event)"
+            (blur)="onFieldBlur(field)"
+            [name]="field.name"
+          />
+        }
+      }
+
+      @if (hasError(field.name)) {
+        <div class="field-errors">
+          @for (error of getFieldErrors(field.name); track error.message) {
+            <div class="error-message" [class.warning]="error.type === 'warning'">
+              {{ error.message }}
+            </div>
+          }
+        </div>
+      }
+
+      @if (hasSuggestion(field.name)) {
+        <div class="field-suggestion">
+          <span class="suggestion-icon">💡</span>
+          <span class="suggestion-text">
+            Did you mean: <strong>{{ suggestions[field.name].suggestedValue }}</strong>?
+          </span>
+          <button type="button" class="suggestion-btn apply" (click)="applySuggestion(field.name)">Apply</button>
+          <button type="button" class="suggestion-btn dismiss" (click)="dismissSuggestion(field.name)">Dismiss</button>
+        </div>
+      }
+    </div>
+  }
+
+  <div class="form-actions">
+    <button type="submit" class="submit-btn" [disabled]="isValidating">
+      @if (isValidating) {
+        <span class="spinner"></span> Validating...
+      } @else {
+        Submit
+      }
+    </button>
+  </div>
+</form>
+

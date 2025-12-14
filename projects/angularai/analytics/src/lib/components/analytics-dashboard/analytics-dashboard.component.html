@@ -1,0 +1,94 @@
+<div class="analytics-dashboard">
+  <div class="dashboard-header">
+    <h2>Analytics Dashboard</h2>
+    <div class="header-actions">
+      <button class="btn btn-primary" (click)="generateInsights()" [disabled]="isLoadingInsights">
+        @if (isLoadingInsights) {
+          <span class="spinner"></span> Generating...
+        } @else {
+          🤖 Generate AI Insights
+        }
+      </button>
+      <button class="btn btn-secondary" (click)="clearData()">Clear Data</button>
+    </div>
+  </div>
+
+  @if (metrics) {
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-value">{{ metrics.totalEvents }}</div>
+        <div class="metric-label">Total Events</div>
+      </div>
+      
+      <div class="metric-card">
+        <div class="metric-value">{{ metrics.pageViews }}</div>
+        <div class="metric-label">Page Views</div>
+      </div>
+      
+      <div class="metric-card">
+        <div class="metric-value">{{ formatDuration(metrics.sessionDuration) }}</div>
+        <div class="metric-label">Session Duration</div>
+      </div>
+      
+      <div class="metric-card">
+        <div class="metric-value">{{ metrics.aiMetrics.totalRequests }}</div>
+        <div class="metric-label">AI Requests</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>AI Request Metrics</h3>
+      <div class="ai-metrics">
+        <div class="ai-metric">
+          <span class="label">Success Rate:</span>
+          <span class="value">
+            @if (metrics.aiMetrics.totalRequests > 0) {
+              {{ (metrics.aiMetrics.successfulRequests / metrics.aiMetrics.totalRequests * 100) | number:'1.0-1' }}%
+            } @else {
+              N/A
+            }
+          </span>
+        </div>
+        <div class="ai-metric">
+          <span class="label">Avg Response Time:</span>
+          <span class="value">{{ metrics.aiMetrics.averageResponseTime | number:'1.0-0' }}ms</span>
+        </div>
+        <div class="ai-metric">
+          <span class="label">Total Tokens:</span>
+          <span class="value">{{ metrics.aiMetrics.totalTokens | number }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>Events by Type</h3>
+      <div class="events-breakdown">
+        @for (type of metrics.eventsByType | keyvalue; track type.key) {
+          <div class="event-type">
+            <span class="type-name">{{ type.key }}</span>
+            <span class="type-count">{{ type.value }}</span>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  @if (insights.length > 0) {
+    <div class="section">
+      <h3>AI-Generated Insights</h3>
+      <div class="insights-list">
+        @for (insight of insights; track insight.id) {
+          <div class="insight-card" [class]="'insight-' + insight.type">
+            <div class="insight-header">
+              <span class="insight-icon">{{ getInsightIcon(insight.type) }}</span>
+              <span class="insight-title">{{ insight.title }}</span>
+              <span class="insight-confidence">{{ (insight.confidence * 100) | number:'1.0-0' }}%</span>
+            </div>
+            <p class="insight-description">{{ insight.description }}</p>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>
+

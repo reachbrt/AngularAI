@@ -1,0 +1,61 @@
+<div class="demo-page">
+  <header class="demo-header">
+    <a routerLink="/" class="back-link">← Back</a>
+    <h1>😊 Emotion UI</h1>
+    <p>Emotion-aware adaptive UI that responds to user sentiment and adjusts the interface accordingly.</p>
+  </header>
+
+  <app-api-key-warning featureName="Emotion UI"></app-api-key-warning>
+
+  <section class="demo-section">
+    <h2>Interactive Demo</h2>
+    @if (hasAPIKey) {
+      <div class="demo-content">
+        <p class="hint">Type in the text area to see the UI adapt to your emotional tone</p>
+        <ai-emotion-aware>
+          <div class="sample-content">
+            <h3>Sample Content</h3>
+            <p>This content will adapt based on detected emotion.</p>
+            <button>Action Button</button>
+          </div>
+        </ai-emotion-aware>
+
+        <div class="emotion-input">
+          <textarea
+            placeholder="Type something to analyze emotion..."
+            (input)="analyzeText($event)"></textarea>
+        </div>
+
+        @if (currentEmotion) {
+          <div class="emotion-result">
+            <strong>Detected Emotion:</strong> {{ currentEmotion.primary }}
+            ({{ (currentEmotion.confidence * 100) | number:'1.0-0' }}% confidence)
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="disabled-overlay">
+        <div class="disabled-content">
+          <span class="lock-icon">🔒</span>
+          <p>Configure an API key to enable this demo</p>
+        </div>
+      </div>
+    }
+  </section>
+
+  <section class="code-section">
+    <h2>Code Example</h2>
+    <pre><code>import &#123; EmotionAwareComponent &#125; from '&#64;angularai/emotion-ui';
+
+&#64;Component(&#123;
+  imports: [EmotionAwareComponent],
+  template: `
+    &lt;ai-emotion-aware (emotionDetected)="onEmotion($event)"&gt;
+      &lt;your-content&gt;&lt;/your-content&gt;
+    &lt;/ai-emotion-aware&gt;
+  `
+&#125;)
+export class MyComponent &#123;&#125;</code></pre>
+  </section>
+</div>
+

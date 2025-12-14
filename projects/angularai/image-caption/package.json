@@ -1,0 +1,13 @@
+{
+  "name": "@angularai/image-caption",
+  "version": "0.0.2",
+  "peerDependencies": {
+    "@angular/common": "^20.3.0",
+    "@angular/core": "^20.3.0",
+    "@angularai/core": "^0.0.2"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false
+}

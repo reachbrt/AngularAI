@@ -1,0 +1,41 @@
+<div class="demo-page">
+  <header class="demo-header">
+    <a routerLink="/" class="back-link">← Back</a>
+    <h1>🖼️ Image Caption</h1>
+    <p>AI-powered image captioning that generates descriptive text for any image.</p>
+  </header>
+
+  <app-api-key-warning featureName="Image Caption"></app-api-key-warning>
+
+  <section class="demo-section">
+    <h2>Interactive Demo</h2>
+    @if (hasAPIKey) {
+      <div class="demo-content">
+        <ai-image-captioner (captionGenerated)="onCaptionGenerated($event)"></ai-image-captioner>
+      </div>
+    } @else {
+      <div class="disabled-overlay">
+        <div class="disabled-content">
+          <span class="lock-icon">🔒</span>
+          <p>Configure an API key to enable this demo</p>
+        </div>
+      </div>
+    }
+  </section>
+
+  <section class="code-section">
+    <h2>Code Example</h2>
+    <pre><code>import &#123; ImageCaptionerComponent &#125; from '&#64;angularai/image-caption';
+
+&#64;Component(&#123;
+  imports: [ImageCaptionerComponent],
+  template: `
+    &lt;ai-image-captioner
+      (captionGenerated)="onCaption($event)"&gt;
+    &lt;/ai-image-captioner&gt;
+  `
+&#125;)
+export class MyComponent &#123;&#125;</code></pre>
+  </section>
+</div>
+

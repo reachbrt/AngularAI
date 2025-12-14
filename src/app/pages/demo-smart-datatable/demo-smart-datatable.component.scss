@@ -1,0 +1,32 @@
+.demo-page { max-width: 1100px; margin: 0 auto; padding: 40px 20px; }
+.demo-header {
+  margin-bottom: 40px;
+  .back-link { color: #007bff; text-decoration: none; font-size: 14px; &:hover { text-decoration: underline; } }
+  h1 { margin: 16px 0 8px; font-size: 2rem; }
+  p { color: #666; margin: 0; }
+}
+.demo-section { margin-bottom: 40px; h2 { font-size: 1.5rem; margin-bottom: 20px; color: #333; } }
+.demo-content { background: white; padding: 24px; border-radius: 12px; box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08); }
+.hint { color: #888; font-size: 14px; margin: 0 0 16px; }
+.disabled-overlay {
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f5f5f5, #eeeeee);
+  border: 2px dashed #ccc;
+  border-radius: 12px;
+
+  .disabled-content {
+    text-align: center;
+    color: #888;
+    .lock-icon { font-size: 3rem; display: block; margin-bottom: 16px; }
+    p { font-size: 1.1rem; margin: 0; }
+  }
+}
+
+.code-section {
+  h2 { font-size: 1.25rem; margin-bottom: 16px; }
+  pre { background: #1e1e1e; color: #d4d4d4; padding: 20px; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.5; }
+}
+

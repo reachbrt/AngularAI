@@ -1,0 +1,64 @@
+<div class="image-captioner">
+  <div class="image-section">
+    @if (imageUrl || previewUrl) {
+      <img [src]="imageUrl || previewUrl" alt="Image to caption" class="preview-image" />
+    } @else {
+      <label class="upload-area">
+        <input type="file" accept="image/*" (change)="onFileSelected($event)" hidden />
+        <div class="upload-content">
+          <span class="upload-icon">📷</span>
+          <span class="upload-text">Click to upload an image</span>
+        </div>
+      </label>
+    }
+  </div>
+
+  <div class="caption-section">
+    @if (isLoading) {
+      <div class="loading">
+        <div class="spinner"></div>
+        <span>Generating caption...</span>
+      </div>
+    }
+
+    @if (result) {
+      <div class="result">
+        <div class="main-caption">
+          <p>{{ result.caption }}</p>
+          <button class="copy-btn" (click)="copyCaption()" title="Copy caption">📋</button>
+        </div>
+
+        @if (result.confidence) {
+          <div class="confidence">
+            Confidence: {{ (result.confidence * 100) | number:'1.0-0' }}%
+          </div>
+        }
+
+        @if (showElements && result.detectedElements?.length) {
+          <div class="elements">
+            <strong>Detected:</strong>
+            @for (element of result.detectedElements; track element) {
+              <span class="element-tag">{{ element }}</span>
+            }
+          </div>
+        }
+
+        @if (showAlternatives && result.alternatives?.length) {
+          <div class="alternatives">
+            <strong>Alternatives:</strong>
+            @for (alt of result.alternatives; track alt) {
+              <p class="alt-caption">{{ alt }}</p>
+            }
+          </div>
+        }
+      </div>
+    }
+
+    @if (!isLoading && !result && (imageUrl || previewUrl)) {
+      <button class="generate-btn" (click)="generateCaption()">
+        🤖 Generate Caption
+      </button>
+    }
+  </div>
+</div>
+

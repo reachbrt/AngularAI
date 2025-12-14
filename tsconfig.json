@@ -1,0 +1,40 @@
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "paths": {
+      "@angularai/analytics": ["./dist/angularai/analytics"],
+      "@angularai/autosuggest": ["./dist/angularai/autosuggest"],
+      "@angularai/chatbot": ["./dist/angularai/chatbot"],
+      "@angularai/core": ["./dist/angularai/core"],
+      "@angularai/doc-intelligence": ["./dist/angularai/doc-intelligence"],
+      "@angularai/emotion-ui": ["./dist/angularai/emotion-ui"],
+      "@angularai/image-caption": ["./dist/angularai/image-caption"],
+      "@angularai/predictive-input": ["./dist/angularai/predictive-input"],
+      "@angularai/smart-datatable": ["./dist/angularai/smart-datatable"],
+      "@angularai/smart-notify": ["./dist/angularai/smart-notify"],
+      "@angularai/smartform": ["./dist/angularai/smartform"],
+      "@angularai/spin-360": ["./dist/angularai/spin-360"],
+      "@angularai/voice-actions": ["./dist/angularai/voice-actions"]
+    },
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "preserve"
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "typeCheckHostBindings": true,
+    "strictTemplates": true
+  }
+}

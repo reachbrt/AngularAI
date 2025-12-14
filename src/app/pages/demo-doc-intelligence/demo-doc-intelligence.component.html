@@ -1,0 +1,41 @@
+<div class="demo-page">
+  <header class="demo-header">
+    <a routerLink="/" class="back-link">← Back</a>
+    <h1>📄 Document Intelligence</h1>
+    <p>AI-powered document OCR, text extraction, and intelligent field recognition.</p>
+  </header>
+
+  <app-api-key-warning featureName="Document Intelligence"></app-api-key-warning>
+
+  <section class="demo-section">
+    <h2>Interactive Demo</h2>
+    @if (hasAPIKey) {
+      <div class="demo-content">
+        <ai-document-extractor (extracted)="onExtractionComplete($event)"></ai-document-extractor>
+      </div>
+    } @else {
+      <div class="disabled-overlay">
+        <div class="disabled-content">
+          <span class="lock-icon">🔒</span>
+          <p>Configure an API key to enable this demo</p>
+        </div>
+      </div>
+    }
+  </section>
+
+  <section class="code-section">
+    <h2>Code Example</h2>
+    <pre><code>import &#123; DocumentExtractorComponent &#125; from '&#64;angularai/doc-intelligence';
+
+&#64;Component(&#123;
+  imports: [DocumentExtractorComponent],
+  template: `
+    &lt;ai-document-extractor
+      (extractionComplete)="onExtract($event)"&gt;
+    &lt;/ai-document-extractor&gt;
+  `
+&#125;)
+export class MyComponent &#123;&#125;</code></pre>
+  </section>
+</div>
+

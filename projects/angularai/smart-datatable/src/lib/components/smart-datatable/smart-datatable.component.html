@@ -1,0 +1,73 @@
+<div class="smart-datatable">
+  @if (aiQueries) {
+    <div class="query-bar">
+      <input 
+        type="text"
+        class="query-input"
+        [(ngModel)]="aiQuery"
+        placeholder="Ask a question about your data..."
+        (keyup.enter)="submitQuery()"
+      />
+      <button class="query-btn" (click)="submitQuery()" [disabled]="isQuerying">
+        {{ isQuerying ? '...' : '🔍' }}
+      </button>
+      @if (aiExplanation) {
+        <button class="clear-btn" (click)="clearQuery()">Clear</button>
+      }
+    </div>
+    
+    @if (aiExplanation) {
+      <div class="ai-explanation">💡 {{ aiExplanation }}</div>
+    }
+  }
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          @for (column of columns; track column.key) {
+            <th 
+              [style.width]="column.width"
+              [class.sortable]="column.sortable"
+              (click)="sort(column)">
+              {{ column.header }}
+              @if (column.sortable) {
+                <span class="sort-icon">{{ getSortIcon(column) }}</span>
+              }
+            </th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of displayData; track $index) {
+          <tr (click)="onRowClick(row)">
+            @for (column of columns; track column.key) {
+              <td>{{ getCellValue(row, column) }}</td>
+            }
+          </tr>
+        } @empty {
+          <tr>
+            <td [attr.colspan]="columns.length" class="empty-message">
+              No data available
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-footer">
+    <div class="pagination">
+      <button (click)="goToPage(1)" [disabled]="currentPage === 1">«</button>
+      <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹</button>
+      <span class="page-info">Page {{ currentPage }} of {{ totalPages }}</span>
+      <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">›</button>
+      <button (click)="goToPage(totalPages)" [disabled]="currentPage === totalPages">»</button>
+    </div>
+
+    @if (exportable) {
+      <button class="export-btn" (click)="export()">📥 Export CSV</button>
+    }
+  </div>
+</div>
+
