@@ -1,0 +1,43 @@
+# Netlify configuration for AngularAI Demo
+
+[build]
+  # Build command - builds only the demo app
+  command = "npm ci && npm run build"
+  # Publish directory for Angular 17+ (outputs to dist/[project]/browser)
+  publish = "dist/angularai/browser"
+
+# Environment variable to specify which Angular project to build
+[build.environment]
+  ANGULAR_PROJECT = "angularai"
+  NODE_VERSION = "20"
+
+# SPA routing - redirect all requests to index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Headers for security and caching
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+
+# Cache static assets
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
