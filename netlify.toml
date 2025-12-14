@@ -1,12 +1,13 @@
 # Netlify configuration for AngularAI Demo
+# Static site deployment - no framework build needed
 
 [build]
-  # No build needed - static files only
-  command = "echo 'Static site - no build required'"
-  # Publish directory - static public folder
+  # Simple command that always succeeds
+  command = "echo 'Static site ready'"
+  # Serve from public folder
   publish = "public"
 
-# Headers for security and caching
+# Headers for security
 [[headers]]
   for = "/*"
   [headers.values]
@@ -14,7 +15,7 @@
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
 
-# Cache static assets
+# Cache CSS
 [[headers]]
   for = "/*.css"
   [headers.values]
