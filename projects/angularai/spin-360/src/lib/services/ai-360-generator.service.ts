@@ -30,7 +30,9 @@ export class AI360GeneratorService {
   generate360Views(request: AI360GenerationRequest): Observable<AI360GenerationResult> {
     const angles = request.angles || DEFAULT_360_ANGLES;
     const numAngles = request.numAngles || angles.length;
-    
+    const quality = request.quality || 'standard';
+    const backgroundColor = request.backgroundColor || '#ffffff';
+
     // Update state to generating
     this.updateState({ status: 'generating', progress: 0, images: [], angles: [] });
 
@@ -38,13 +40,15 @@ export class AI360GeneratorService {
     return this.analyzeSourceImage(request.sourceImage, request.objectDescription).pipe(
       switchMap(objectInfo => {
         this.updateState({ objectInfo, progress: 10 });
-        
+
         // Generate images for each angle
         return this.generateAngleViews(
           request.sourceImage,
           objectInfo,
           angles.slice(0, numAngles),
-          request.imageSize || '1024x1024'
+          request.imageSize || '1024x1024',
+          quality,
+          backgroundColor
         );
       }),
       tap(result => {
@@ -107,15 +111,17 @@ The center is the focal point where rotation should occur (as percentage 0-100).
     sourceImage: string,
     objectInfo: { name: string; center: { x: number; y: number }; description: string },
     angles: number[],
-    imageSize: '256x256' | '512x512' | '1024x1024'
+    imageSize: '256x256' | '512x512' | '1024x1024',
+    quality: 'standard' | 'hd' = 'standard',
+    backgroundColor: string = '#ffffff'
   ): Observable<AI360GenerationResult> {
     const imageGenerations$ = angles.map((angle, index) => {
-      const prompt = this.createAnglePrompt(objectInfo, angle);
-      
+      const prompt = this.createAnglePrompt(objectInfo, angle, backgroundColor);
+
       return this.aiClient.generateImage({
         prompt,
         size: imageSize,
-        quality: 'standard',
+        quality: quality,
         style: 'natural',
         n: 1
       }).pipe(
@@ -147,25 +153,42 @@ The center is the focal point where rotation should occur (as percentage 0-100).
    */
   private createAnglePrompt(
     objectInfo: { name: string; description: string },
-    angle: number
+    angle: number,
+    backgroundColor: string = '#ffffff'
   ): string {
     const viewDescriptions: Record<number, string> = {
       0: 'front view, directly facing the camera',
+      30: 'front-right view, 30 degrees to the right',
       45: 'front-right view, 45 degrees to the right',
+      60: 'right-front view, 60 degrees to the right',
       90: 'right side view, profile from the right',
+      120: 'right-back view, 120 degrees rotated',
       135: 'back-right view, 45 degrees from behind on the right',
+      150: 'back-right view, 30 degrees from behind',
       180: 'back view, directly from behind',
+      210: 'back-left view, 30 degrees from behind on the left',
       225: 'back-left view, 45 degrees from behind on the left',
+      240: 'left-back view, 120 degrees from left',
       270: 'left side view, profile from the left',
-      315: 'front-left view, 45 degrees to the left'
+      300: 'left-front view, 60 degrees from left',
+      315: 'front-left view, 45 degrees to the left',
+      330: 'front-left view, 30 degrees to the left'
     };
 
-    const viewDesc = viewDescriptions[angle] || `rotated ${angle} degrees`;
-    
+    const viewDesc = viewDescriptions[angle] || `rotated ${angle} degrees clockwise from front`;
+
+    // Convert hex color to description
+    const bgDesc = backgroundColor === '#ffffff' || backgroundColor === 'white'
+      ? 'clean white background'
+      : backgroundColor === '#000000' || backgroundColor === 'black'
+        ? 'black background'
+        : `${backgroundColor} colored background`;
+
     return `Product photography of ${objectInfo.name}: ${viewDesc}.
 ${objectInfo.description}
-Professional studio lighting, clean white/neutral background, high quality product shot.
-The object should be centered and clearly visible, maintaining consistent scale and positioning.`;
+Professional studio lighting, ${bgDesc}, high quality product shot.
+The object should be centered and clearly visible, maintaining consistent scale and positioning across all angles.
+Photorealistic, commercial product photography style.`;
   }
 
   private updateState(partial: Partial<AI360GenerationResult>): void {

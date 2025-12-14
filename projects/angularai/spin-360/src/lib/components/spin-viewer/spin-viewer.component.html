@@ -1,13 +1,22 @@
-<div 
+<div
   class="spin-viewer"
   #container
+  [class.dragging]="isDragging"
+  [class.hovering]="isHovering"
+  [class.playing]="isPlaying"
+  [class.mode-gif]="mode === 'gif'"
+  [class.mode-frames]="mode === 'frames'"
+  (mouseenter)="onMouseEnter()"
+  (mouseleave)="onMouseLeave(); onMouseUp()"
   (mousedown)="onMouseDown($event)"
   (mousemove)="onMouseMove($event)"
   (mouseup)="onMouseUp()"
-  (mouseleave)="onMouseUp()"
-  (wheel)="onWheel($event)"
-  [class.dragging]="isDragging">
-  
+  (touchstart)="onTouchStart($event)"
+  (touchmove)="onTouchMove($event)"
+  (touchend)="onTouchEnd()"
+  (click)="onClick()"
+  (wheel)="onWheel($event)">
+
   @if (isLoading) {
     <div class="loading">
       <div class="spinner"></div>
@@ -15,10 +24,26 @@
     </div>
   } @else {
     <div class="image-container" [style.transform]="'scale(' + zoom + ')'">
-      <img [src]="currentImage" alt="360 view" draggable="false" />
-      
+      <!-- GIF mode: show static/gif based on hover -->
+      @if (mode === 'gif') {
+        <img
+          [src]="displayImage"
+          alt="360 view"
+          draggable="false"
+          [class.is-gif]="isHovering && gifUrl" />
+        @if (!isHovering && gifUrl) {
+          <div class="gif-indicator">
+            <span class="gif-badge">GIF</span>
+            <span class="hover-hint">Hover to play</span>
+          </div>
+        }
+      } @else {
+        <!-- Frames mode: show current frame -->
+        <img [src]="currentImage" alt="360 view" draggable="false" />
+      }
+
       @for (hotspot of visibleHotspots; track hotspot.id) {
-        <div 
+        <div
           class="hotspot"
           [style.left.%]="hotspot.x"
           [style.top.%]="hotspot.y"
@@ -36,19 +61,19 @@
     </div>
   }
 
-  @if (showControls && !isLoading) {
+  @if (showControls && !isLoading && mode === 'frames') {
     <div class="controls">
-      <button (click)="prevFrame()" title="Previous">◀</button>
-      <button (click)="toggleAutoRotate()" [title]="autoRotateInterval ? 'Stop' : 'Auto-rotate'">
+      <button (click)="prevFrame(); $event.stopPropagation()" title="Previous">◀</button>
+      <button (click)="toggleAutoRotate(); $event.stopPropagation()" [title]="autoRotateInterval ? 'Stop' : 'Auto-rotate'">
         {{ autoRotateInterval ? '⏸' : '▶' }}
       </button>
-      <button (click)="nextFrame()" title="Next">▶</button>
-      
+      <button (click)="nextFrame(); $event.stopPropagation()" title="Next">▶</button>
+
       @if (zoomable) {
         <span class="divider">|</span>
-        <button (click)="zoom = zoom + 0.5" [disabled]="zoom >= maxZoom" title="Zoom in">🔍+</button>
-        <button (click)="zoom = zoom - 0.5" [disabled]="zoom <= 1" title="Zoom out">🔍-</button>
-        <button (click)="resetZoom()" [disabled]="zoom === 1" title="Reset zoom">↺</button>
+        <button (click)="zoom = zoom + 0.5; $event.stopPropagation()" [disabled]="zoom >= maxZoom" title="Zoom in">🔍+</button>
+        <button (click)="zoom = zoom - 0.5; $event.stopPropagation()" [disabled]="zoom <= 1" title="Zoom out">🔍-</button>
+        <button (click)="resetZoom(); $event.stopPropagation()" [disabled]="zoom === 1" title="Reset zoom">↺</button>
       }
     </div>
 

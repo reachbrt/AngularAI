@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { AI360GeneratorService } from '../../services/ai-360-generator.service';
 import { GifGeneratorService, GifGenerationProgress } from '../../services/gif-generator.service';
-import { AI360GenerationResult, DEFAULT_360_ANGLES } from '../../models/spin-360.model';
+import { AI360GenerationResult, ANGLE_PRESETS, ImageQuality } from '../../models/spin-360.model';
 
 @Component({
   selector: 'ai-spin-generator',
@@ -14,10 +14,18 @@ import { AI360GenerationResult, DEFAULT_360_ANGLES } from '../../models/spin-360
   styleUrl: './spin-generator.component.scss'
 })
 export class SpinGeneratorComponent implements OnDestroy {
-  @Input() numAngles = 8;
+  /** Number of angles to generate (4, 8, 12, 24, 36, or 72) */
+  @Input() numAngles: 4 | 8 | 12 | 24 | 36 | 72 = 8;
+  /** Image size for generated images */
   @Input() imageSize: '256x256' | '512x512' | '1024x1024' = '1024x1024';
+  /** Image quality */
+  @Input() quality: ImageQuality = 'standard';
+  /** Background color for generated images */
+  @Input() backgroundColor = '#ffffff';
+  /** Auto-generate GIF after images are ready */
   @Input() generateGif = true;
-  @Input() gifFrameDelay = 150; // ms per frame
+  /** Frame delay in ms for GIF */
+  @Input() gifFrameDelay = 150;
 
   @Output() generationComplete = new EventEmitter<AI360GenerationResult>();
   @Output() imagesGenerated = new EventEmitter<string[]>();
@@ -37,6 +45,9 @@ export class SpinGeneratorComponent implements OnDestroy {
   gifUrl: string | null = null;
   gifBlob: Blob | null = null;
   isHoveringGif = false;
+
+  // Available angle presets for UI
+  readonly anglePresets = [4, 8, 12, 24, 36] as const;
 
   constructor(
     private generator: AI360GeneratorService,
@@ -107,12 +118,16 @@ export class SpinGeneratorComponent implements OnDestroy {
   generate360(): void {
     if (!this.sourceImage) return;
 
+    const angles = ANGLE_PRESETS[this.numAngles] || ANGLE_PRESETS[8];
+
     this.generator.generate360Views({
       sourceImage: this.sourceImage,
       numAngles: this.numAngles,
-      angles: DEFAULT_360_ANGLES.slice(0, this.numAngles),
+      angles: angles,
       objectDescription: this.objectDescription || undefined,
-      imageSize: this.imageSize
+      imageSize: this.imageSize,
+      quality: this.quality,
+      backgroundColor: this.backgroundColor
     }).subscribe();
   }
 
