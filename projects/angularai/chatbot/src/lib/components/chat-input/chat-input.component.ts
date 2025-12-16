@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 export class ChatInputComponent {
   @Input() placeholder = 'Type a message...';
   @Input() disabled = false;
+  @Input() sendButtonText = 'Send';
 
   @Output() send = new EventEmitter<string>();
 

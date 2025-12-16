@@ -1,10 +1,10 @@
-<div class="chat-window" [ngClass]="getThemeClass()">
+<div class="chat-window" [ngClass]="getContainerClasses()">
   <div class="chat-header">
     <div class="chat-title">
       <span class="status-dot" [class.active]="!isLoading"></span>
-      AI Assistant
+      {{ title }}
     </div>
-    <button class="clear-btn" (click)="onClearChat()" title="Clear chat">
+    <button class="clear-btn" (click)="onClearChat()" [title]="getLabel('clear')">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <polyline points="3,6 5,6 21,6"></polyline>
         <path d="M19,6v14a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V6m3,0V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2v2"></path>
@@ -23,15 +23,18 @@
     @for (message of messages; track message.id) {
       <ai-chat-message
         [message]="message"
-        [showTimestamp]="showTimestamps">
+        [showTimestamp]="showTimestamps"
+        [showAvatar]="showAvatars"
+        [enableMarkdown]="enableMarkdown">
       </ai-chat-message>
     }
 
     @if (isLoading) {
       <div class="typing-indicator">
-        <span></span>
-        <span></span>
-        <span></span>
+        <span class="typing-text">{{ getLabel('loading') }}</span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
       </div>
     }
   </div>
@@ -39,6 +42,7 @@
   <ai-chat-input
     [placeholder]="placeholder"
     [disabled]="isLoading"
+    [sendButtonText]="getLabel('send')"
     (send)="onSendMessage($event)">
   </ai-chat-input>
 </div>

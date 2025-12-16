@@ -12,6 +12,8 @@ import { ChatMessage } from '../../models/chat.model';
 export class ChatMessageComponent {
   @Input({ required: true }) message!: ChatMessage;
   @Input() showTimestamp = true;
+  @Input() showAvatar = true;
+  @Input() enableMarkdown = true;
 
   get isUser(): boolean {
     return this.message.role === 'user';
@@ -22,14 +24,30 @@ export class ChatMessageComponent {
   }
 
   get formattedTime(): string {
-    return this.message.timestamp.toLocaleTimeString([], { 
-      hour: '2-digit', 
-      minute: '2-digit' 
+    return this.message.timestamp.toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit'
     });
   }
 
   get roleLabel(): string {
     return this.isUser ? 'You' : 'AI';
+  }
+
+  get avatarEmoji(): string {
+    return this.isUser ? '👤' : '🤖';
+  }
+
+  get formattedContent(): string {
+    if (!this.enableMarkdown) {
+      return this.message.content;
+    }
+    // Simple markdown: bold, italic, code
+    return this.message.content
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em>$1</em>')
+      .replace(/`(.+?)`/g, '<code>$1</code>')
+      .replace(/\n/g, '<br>');
   }
 }
 

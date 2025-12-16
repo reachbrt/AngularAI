@@ -1,11 +1,11 @@
 .demo-page {
-  max-width: 900px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 40px 20px;
 }
 
 .demo-header {
-  margin-bottom: 40px;
+  margin-bottom: 30px;
 
   .back-link {
     color: #007bff;
@@ -18,9 +18,164 @@
   p { color: #666; margin: 0; }
 }
 
-.demo-section {
+// Two-column layout
+.demo-layout {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 30px;
   margin-bottom: 40px;
-  h2 { font-size: 1.5rem; margin-bottom: 20px; color: #333; }
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Configuration Panel
+.config-panel {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  height: fit-content;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: sticky;
+  top: 20px;
+
+  .config-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e0e0e0;
+
+    h3 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+  }
+
+  .reset-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+
+    &:hover {
+      background: #c82333;
+    }
+  }
+}
+
+.config-section {
+  margin-bottom: 20px;
+
+  h4 {
+    font-size: 0.9rem;
+    color: #495057;
+    margin: 0 0 12px 0;
+    font-weight: 600;
+  }
+}
+
+.form-group {
+  margin-bottom: 12px;
+
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: #666;
+    margin-bottom: 4px;
+  }
+
+  input[type="text"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 13px;
+    transition: border-color 0.2s;
+
+    &:focus {
+      outline: none;
+      border-color: #007bff;
+    }
+  }
+
+  textarea {
+    resize: vertical;
+    font-family: inherit;
+  }
+}
+
+.checkbox-group {
+  margin-bottom: 8px;
+
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #333;
+
+    input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+  }
+}
+
+.section-toggle {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #e9ecef;
+  border: none;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #495057;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: background 0.2s;
+
+  &:hover {
+    background: #dee2e6;
+  }
+
+  .toggle-icon {
+    font-size: 10px;
+  }
+}
+
+.section-content {
+  padding: 10px 0;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+// Preview Panel
+.preview-panel {
+  h2 {
+    font-size: 1.25rem;
+    margin: 0 0 16px 0;
+    color: #333;
+  }
 }
 
 .chat-container {
@@ -28,6 +183,10 @@
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+
+  &.full-height {
+    height: 600px;
+  }
 }
 
 .disabled-overlay {

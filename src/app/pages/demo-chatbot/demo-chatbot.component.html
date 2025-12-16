@@ -7,25 +7,196 @@
 
   <app-api-key-warning featureName="Chatbot"></app-api-key-warning>
 
-  <section class="demo-section">
-    <h2>Interactive Demo</h2>
-    @if (hasAPIKey) {
-      <div class="chat-container">
-        <ai-chat-window
-          title="AI Assistant"
-          placeholder="Ask me anything..."
-          (messageSent)="onMessageSent($event)">
-        </ai-chat-window>
+  <div class="demo-layout">
+    <!-- Configuration Panel -->
+    <aside class="config-panel">
+      <div class="config-header">
+        <h3>⚙️ Configuration</h3>
+        <button class="reset-btn" (click)="resetConfig()">Reset</button>
       </div>
-    } @else {
-      <div class="disabled-overlay">
-        <div class="disabled-content">
-          <span class="lock-icon">🔒</span>
-          <p>Configure an API key to enable this demo</p>
+
+      <!-- Basic Configuration -->
+      <section class="config-section">
+        <h4>🎨 Basic Configuration</h4>
+
+        <div class="form-group">
+          <label for="title">Title</label>
+          <input type="text" id="title" [(ngModel)]="config.title" placeholder="AI Assistant">
         </div>
-      </div>
-    }
-  </section>
+
+        <div class="form-group">
+          <label for="placeholder">Placeholder</label>
+          <input type="text" id="placeholder" [(ngModel)]="config.placeholder" placeholder="Ask me anything...">
+        </div>
+
+        <div class="form-group">
+          <label for="theme">Theme</label>
+          <select id="theme" [(ngModel)]="config.theme">
+            @for (opt of themeOptions; track opt.value) {
+              <option [value]="opt.value">{{ opt.label }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="model">Model</label>
+          <select id="model" [(ngModel)]="config.model">
+            @for (opt of modelOptions; track opt.value) {
+              <option [value]="opt.value">{{ opt.label }}</option>
+            }
+          </select>
+        </div>
+      </section>
+
+      <!-- Toggle Options -->
+      <section class="config-section">
+        <h4>✅ Toggle Options</h4>
+
+        <div class="checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" [(ngModel)]="config.showAvatars">
+            <span>Show Avatars</span>
+          </label>
+        </div>
+
+        <div class="checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" [(ngModel)]="config.streaming">
+            <span>Enable Streaming</span>
+          </label>
+        </div>
+
+        <div class="checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" [(ngModel)]="config.fullHeight">
+            <span>Full Height</span>
+          </label>
+        </div>
+
+        <div class="checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" [(ngModel)]="config.enableMarkdown">
+            <span>Enable Markdown</span>
+          </label>
+        </div>
+
+        <div class="checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" [(ngModel)]="config.useProxy">
+            <span>Use Proxy</span>
+          </label>
+        </div>
+      </section>
+
+      <!-- Advanced Options -->
+      <section class="config-section">
+        <button class="section-toggle" (click)="showAdvanced = !showAdvanced">
+          <span>🔧 Advanced Options</span>
+          <span class="toggle-icon">{{ showAdvanced ? '▲' : '▼' }}</span>
+        </button>
+
+        @if (showAdvanced) {
+          <div class="section-content">
+            @if (config.useProxy) {
+              <div class="form-group">
+                <label for="proxyUrl">Proxy URL</label>
+                <input type="text" id="proxyUrl" [(ngModel)]="config.proxyUrl" placeholder="/api/chat">
+              </div>
+            }
+
+            <div class="form-group">
+              <label for="language">Language</label>
+              <select id="language" [(ngModel)]="config.language">
+                @for (opt of languageOptions; track opt.value) {
+                  <option [value]="opt.value">{{ opt.label }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="systemPrompt">System Prompt</label>
+              <textarea id="systemPrompt" [(ngModel)]="config.systemPrompt" rows="4"
+                placeholder="You are a helpful AI assistant..."></textarea>
+            </div>
+          </div>
+        }
+      </section>
+
+      <!-- Custom Labels -->
+      <section class="config-section">
+        <button class="section-toggle" (click)="showCustomLabels = !showCustomLabels">
+          <span>📝 Custom Text Labels (i18n)</span>
+          <span class="toggle-icon">{{ showCustomLabels ? '▲' : '▼' }}</span>
+        </button>
+
+        @if (showCustomLabels) {
+          <div class="section-content">
+            <div class="form-group">
+              <label for="labelTitle">Title</label>
+              <input type="text" id="labelTitle" [(ngModel)]="config.customLabels.title">
+            </div>
+            <div class="form-group">
+              <label for="labelPlaceholder">Placeholder</label>
+              <input type="text" id="labelPlaceholder" [(ngModel)]="config.customLabels.placeholder">
+            </div>
+            <div class="form-group">
+              <label for="labelSend">Send Button</label>
+              <input type="text" id="labelSend" [(ngModel)]="config.customLabels.sendButton">
+            </div>
+            <div class="form-group">
+              <label for="labelCopy">Copy Button</label>
+              <input type="text" id="labelCopy" [(ngModel)]="config.customLabels.copyButton">
+            </div>
+            <div class="form-group">
+              <label for="labelClear">Clear Button</label>
+              <input type="text" id="labelClear" [(ngModel)]="config.customLabels.clearButton">
+            </div>
+            <div class="form-group">
+              <label for="labelTyping">Typing Message</label>
+              <input type="text" id="labelTyping" [(ngModel)]="config.customLabels.typing">
+            </div>
+            <div class="form-group">
+              <label for="labelError">Error Message</label>
+              <input type="text" id="labelError" [(ngModel)]="config.customLabels.error">
+            </div>
+          </div>
+        }
+      </section>
+    </aside>
+
+    <!-- Chat Preview -->
+    <main class="preview-panel">
+      <h2>🎯 Live Preview</h2>
+
+      @if (hasAPIKey) {
+        <div [class]="getContainerClass()">
+          <ai-chat-window
+            [title]="config.title"
+            [placeholder]="config.placeholder"
+            [theme]="config.theme"
+            [model]="config.model"
+            [showAvatars]="config.showAvatars"
+            [streaming]="config.streaming"
+            [fullHeight]="config.fullHeight"
+            [enableMarkdown]="config.enableMarkdown"
+            [useProxy]="config.useProxy"
+            [proxyUrl]="config.proxyUrl"
+            [language]="config.language"
+            [systemPrompt]="config.systemPrompt"
+            [customLabels]="config.customLabels"
+            (messageSent)="onMessageSent($event)">
+          </ai-chat-window>
+        </div>
+      } @else {
+        <div class="disabled-overlay">
+          <div class="disabled-content">
+            <span class="lock-icon">🔒</span>
+            <p>Configure an API key to enable this demo</p>
+          </div>
+        </div>
+      }
+    </main>
+  </div>
 
   <section class="code-section">
     <h2>Code Example</h2>
@@ -35,8 +206,15 @@
   imports: [ChatWindowComponent],
   template: `
     &lt;ai-chat-window
-      title="AI Assistant"
-      placeholder="Ask me anything..."
+      title="{{ config.title }}"
+      placeholder="{{ config.placeholder }}"
+      theme="{{ config.theme }}"
+      model="{{ config.model }}"
+      [showAvatars]="{{ config.showAvatars }}"
+      [streaming]="{{ config.streaming }}"
+      [enableMarkdown]="{{ config.enableMarkdown }}"
+      language="{{ config.language }}"
+      systemPrompt="{{ config.systemPrompt }}"
       (messageSent)="onMessage($event)"&gt;
     &lt;/ai-chat-window&gt;
   `
