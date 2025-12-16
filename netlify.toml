@@ -1,11 +1,29 @@
 # Netlify configuration for AngularAI Demo
-# Static site deployment - no framework build needed
+# Static site deployment - serves static HTML from public folder
 
 [build]
-  # Simple command that always succeeds
-  command = "echo 'Static site ready'"
-  # Serve from public folder
+  # Simple command - no framework build
+  command = "echo 'Deploying static demo site'"
+  # Serve from public folder (static HTML/CSS)
   publish = "public"
+
+# Explicitly skip all framework-specific plugins
+[build.processing]
+  skip_processing = false
+
+[build.processing.css]
+  bundle = false
+  minify = false
+
+[build.processing.js]
+  bundle = false
+  minify = false
+
+[build.processing.html]
+  pretty_urls = false
+
+[build.processing.images]
+  compress = false
 
 # Headers for security
 [[headers]]
