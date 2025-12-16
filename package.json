@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:libs": "ng build @angularai/core && ng build @angularai/analytics && ng build @angularai/autosuggest && ng build @angularai/chatbot && ng build @angularai/doc-intelligence && ng build @angularai/emotion-ui && ng build @angularai/image-caption && ng build @angularai/predictive-input && ng build @angularai/smart-datatable && ng build @angularai/smart-notify && ng build @angularai/smartform && ng build @angularai/spin-360 && ng build @angularai/voice-actions",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

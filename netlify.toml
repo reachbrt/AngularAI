@@ -1,29 +1,18 @@
 # Netlify configuration for AngularAI Demo
-# Static site deployment - serves static HTML from public folder
+# Full Angular build with all libraries
 
 [build]
-  # Simple command - no framework build
-  command = "echo 'Deploying static demo site'"
-  # Serve from public folder (static HTML/CSS)
-  publish = "public"
+  # Build all libraries first, then the main app
+  command = "npm ci && npm run build:libs && npm run build"
+  # Angular output directory
+  publish = "dist/angularai/browser"
 
-# Explicitly skip all framework-specific plugins
-[build.processing]
-  skip_processing = false
-
-[build.processing.css]
-  bundle = false
-  minify = false
-
-[build.processing.js]
-  bundle = false
-  minify = false
-
-[build.processing.html]
-  pretty_urls = false
-
-[build.processing.images]
-  compress = false
+# Environment variables
+[build.environment]
+  # Specify the Angular project to build
+  ANGULAR_PROJECT = "angularai"
+  # Node version
+  NODE_VERSION = "20"
 
 # Headers for security
 [[headers]]
@@ -33,9 +22,20 @@
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
 
-# Cache CSS
+# Cache static assets
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
 [[headers]]
   for = "/*.css"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# SPA fallback - redirect all routes to index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
 
