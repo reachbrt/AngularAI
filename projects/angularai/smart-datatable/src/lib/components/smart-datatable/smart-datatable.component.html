@@ -1,53 +1,142 @@
-<div class="smart-datatable">
-  @if (aiQueries) {
-    <div class="query-bar">
-      <input 
-        type="text"
-        class="query-input"
-        [(ngModel)]="aiQuery"
-        placeholder="Ask a question about your data..."
-        (keyup.enter)="submitQuery()"
-      />
-      <button class="query-btn" (click)="submitQuery()" [disabled]="isQuerying">
-        {{ isQuerying ? '...' : '🔍' }}
-      </button>
-      @if (aiExplanation) {
-        <button class="clear-btn" (click)="clearQuery()">Clear</button>
+<div class="smart-datatable" [class.dark-theme]="theme === 'dark'">
+  <!-- Header -->
+  <div class="datatable-header">
+    <div class="header-left">
+      @if (title) {
+        <h3 class="datatable-title">{{ title }}</h3>
+      }
+      <span class="datatable-count">{{ totalItems }} items</span>
+    </div>
+    <div class="header-right">
+      @if (aiInsights) {
+        <button class="action-btn" (click)="generateInsights()" [disabled]="isLoadingInsights">
+          💡 {{ isLoadingInsights ? 'Loading...' : 'Insights' }}
+        </button>
+      }
+      @if (exportable) {
+        <div class="export-dropdown">
+          <button class="action-btn">📥 Export</button>
+          <div class="dropdown-content">
+            <button (click)="exportCSV()">CSV</button>
+            <button (click)="exportJSON()">JSON</button>
+            <button (click)="exportExcel()">Excel</button>
+          </div>
+        </div>
       }
     </div>
-    
-    @if (aiExplanation) {
-      <div class="ai-explanation">💡 {{ aiExplanation }}</div>
-    }
+  </div>
+
+  <!-- AI Search Bar -->
+  @if (aiSearch || aiQueries) {
+    <div class="ai-search-container">
+      <div class="search-box">
+        <span class="search-icon">🤖</span>
+        <input
+          type="text"
+          class="query-input"
+          [(ngModel)]="aiQuery"
+          placeholder="Ask AI: e.g., show orders where total > 500"
+          (keyup.enter)="submitQuery()"
+          [disabled]="isQuerying"
+        />
+        @if (aiQuery && !isQuerying) {
+          <button class="search-btn" (click)="submitQuery()">🔍 Search</button>
+        }
+        @if (isQuerying) {
+          <button class="search-btn" disabled>⏳ Processing...</button>
+        }
+        @if (aiExplanation) {
+          <button class="clear-btn" (click)="clearQuery()">✕ Clear</button>
+        }
+      </div>
+      @if (aiExplanation) {
+        <div class="ai-explanation">🤖 {{ aiExplanation }}</div>
+      }
+    </div>
   }
 
+  <!-- AI Insights Panel -->
+  @if (showInsightsPanel && insights.length > 0) {
+    <div class="insights-panel">
+      <div class="insights-header">
+        <h4>💡 AI Insights</h4>
+        <button class="close-btn" (click)="closeInsightsPanel()">×</button>
+      </div>
+      <div class="insights-content">
+        @for (insight of insights; track insight.id) {
+          <div class="insight-item" [class]="'insight-' + insight.category">
+            <div class="insight-title">
+              <strong>{{ insight.title }}</strong>
+              <span class="confidence">{{ (insight.confidence * 100) | number:'1.0-0' }}%</span>
+            </div>
+            <p class="insight-description">{{ insight.description }}</p>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Data Table -->
   <div class="table-container">
     <table>
       <thead>
         <tr>
-          @for (column of columns; track column.key) {
-            <th 
+          @if (selectable) {
+            <th class="checkbox-col">
+              <input type="checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()" />
+            </th>
+          }
+          @for (column of visibleColumns; track column.key) {
+            <th
               [style.width]="column.width"
+              [style.textAlign]="column.align || 'left'"
               [class.sortable]="column.sortable"
               (click)="sort(column)">
-              {{ column.header }}
+              {{ column.label || column.header }}
               @if (column.sortable) {
                 <span class="sort-icon">{{ getSortIcon(column) }}</span>
               }
             </th>
           }
+          @if (rowAgents.length > 0) {
+            <th class="actions-col">Actions</th>
+          }
         </tr>
       </thead>
       <tbody>
         @for (row of displayData; track $index) {
-          <tr (click)="onRowClick(row)">
-            @for (column of columns; track column.key) {
-              <td>{{ getCellValue(row, column) }}</td>
+          <tr
+            (click)="onRowClick(row)"
+            [class.selected]="isRowSelected(row)">
+            @if (selectable) {
+              <td class="checkbox-col">
+                <input
+                  type="checkbox"
+                  [checked]="isRowSelected(row)"
+                  (change)="toggleRowSelection(row, $event)" />
+              </td>
+            }
+            @for (column of visibleColumns; track column.key) {
+              <td [style.textAlign]="column.align || 'left'">
+                {{ getCellValue(row, column) }}
+              </td>
+            }
+            @if (rowAgents.length > 0) {
+              <td class="actions-col">
+                @for (agent of rowAgents; track agent.id) {
+                  <button
+                    class="agent-btn"
+                    (click)="executeRowAgent(agent, row); $event.stopPropagation()"
+                    [title]="agent.label">
+                    {{ agent.icon || '🤖' }}
+                  </button>
+                }
+              </td>
             }
           </tr>
         } @empty {
           <tr>
-            <td [attr.colspan]="columns.length" class="empty-message">
+            <td [attr.colspan]="visibleColumns.length + (selectable ? 1 : 0) + (rowAgents.length > 0 ? 1 : 0)" class="empty-message">
               No data available
             </td>
           </tr>
@@ -56,7 +145,22 @@
     </table>
   </div>
 
+  <!-- Footer with Pagination -->
   <div class="table-footer">
+    <div class="footer-left">
+      @if (pageSizeOptions && pageSizeOptions.length > 0) {
+        <div class="page-size-selector">
+          <span>Show</span>
+          <select [ngModel]="pageSize" (ngModelChange)="onPageSizeChange($event)">
+            @for (size of pageSizeOptions; track size) {
+              <option [value]="size">{{ size }}</option>
+            }
+          </select>
+          <span>entries</span>
+        </div>
+      }
+    </div>
+
     <div class="pagination">
       <button (click)="goToPage(1)" [disabled]="currentPage === 1">«</button>
       <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹</button>
@@ -65,9 +169,76 @@
       <button (click)="goToPage(totalPages)" [disabled]="currentPage === totalPages">»</button>
     </div>
 
-    @if (exportable) {
-      <button class="export-btn" (click)="export()">📥 Export CSV</button>
-    }
+    <div class="footer-right">
+      @if (selectable && selectedRows.size > 0) {
+        <span class="selection-info">{{ selectedRows.size }} selected</span>
+      }
+    </div>
   </div>
-</div>
 
+  <!-- Chat Toggle Button -->
+  @if (aiSearch || aiQueries) {
+    <button class="chat-toggle-btn" (click)="toggleChatWindow()" [class.active]="showChatWindow">
+      <span class="chat-icon">💬</span>
+      <span class="chat-label">AI Chat</span>
+    </button>
+  }
+
+  <!-- Floating Chat Window -->
+  @if (showChatWindow) {
+    <div class="chat-window">
+      <div class="chat-header">
+        <div class="chat-title">
+          <span class="chat-title-icon">🤖</span>
+          <span>AI Data Assistant</span>
+        </div>
+        <div class="chat-header-actions">
+          <button class="chat-clear-btn" (click)="clearChatFilters()" title="Clear filters">🔄</button>
+          <button class="chat-close-btn" (click)="closeChatWindow()">×</button>
+        </div>
+      </div>
+
+      <div class="chat-messages">
+        @for (message of chatMessages; track message.id) {
+          <div class="chat-message" [class.user]="message.role === 'user'" [class.assistant]="message.role === 'assistant'">
+            <div class="message-content">
+              {{ message.content }}
+              @if (message.filterApplied) {
+                <div class="message-result">
+                  <span class="result-badge">{{ message.resultCount }} results</span>
+                </div>
+              }
+            </div>
+            <div class="message-time">{{ message.timestamp | date:'shortTime' }}</div>
+          </div>
+        }
+        @if (isChatProcessing) {
+          <div class="chat-message assistant">
+            <div class="message-content typing">
+              <span class="typing-dot"></span>
+              <span class="typing-dot"></span>
+              <span class="typing-dot"></span>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="chat-input-container">
+        <input
+          type="text"
+          class="chat-input"
+          [(ngModel)]="chatInput"
+          placeholder="Ask about your data..."
+          (keyup.enter)="sendChatMessage()"
+          [disabled]="isChatProcessing"
+        />
+        <button
+          class="chat-send-btn"
+          (click)="sendChatMessage()"
+          [disabled]="!chatInput.trim() || isChatProcessing">
+          ➤
+        </button>
+      </div>
+    </div>
+  }
+</div>
