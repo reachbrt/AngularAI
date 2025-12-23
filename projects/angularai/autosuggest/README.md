@@ -4,8 +4,15 @@
 
   <p>
     <a href="https://www.npmjs.com/package/@angularai/autosuggest"><img src="https://img.shields.io/npm/v/@angularai/autosuggest.svg?style=flat-square" alt="npm version"></a>
+    <a href="https://www.npmjs.com/package/@angularai/autosuggest"><img src="https://img.shields.io/npm/dm/@angularai/autosuggest.svg?style=flat-square" alt="npm downloads"></a>
     <a href="https://www.npmjs.com/package/@angularai/autosuggest"><img src="https://img.shields.io/npm/l/@angularai/autosuggest.svg?style=flat-square" alt="MIT License"></a>
-    <a href="https://angular.dev"><img src="https://img.shields.io/badge/Angular-20+-dd0031?style=flat-square&logo=angular" alt="Angular 20+"></a>
+    <a href="https://angular.dev"><img src="https://img.shields.io/badge/Angular-17+-dd0031?style=flat-square&logo=angular" alt="Angular 17+"></a>
+  </p>
+
+  <p>
+    <a href="https://github.com/reachbrt/angularai">GitHub</a> •
+    <a href="https://angularai.netlify.app">Live Demo</a> •
+    <a href="https://www.npmjs.com/package/@angularai/autosuggest">npm</a>
   </p>
 </div>
 
@@ -113,6 +120,15 @@ export class SearchComponent {
 | [@angularai/predictive-input](https://www.npmjs.com/package/@angularai/predictive-input) | Predictive text input |
 | [@angularai/smartform](https://www.npmjs.com/package/@angularai/smartform) | AI form validation |
 
+## 🔗 Related Projects
+
+| Framework | Repository | Status |
+|-----------|-----------|--------|
+| **Vue.js** | [@aivue](https://github.com/reachbrt/vueai) | ✅ Available |
+| **React** | [@anthropic-ai/react](https://github.com/reachbrt/reactai) | ✅ Available |
+| **Angular** | [@angularai](https://github.com/reachbrt/angularai) | ✅ Available |
+| **Svelte** | [@svelteai](https://github.com/reachbrt/svelteai) | 💡 Planned |
+
 ## 📄 License
 
-MIT © [AngularAI](https://github.com/angularai)
+MIT © [AngularAI](https://github.com/reachbrt/angularai)

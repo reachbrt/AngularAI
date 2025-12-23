@@ -8,6 +8,7 @@
   <!-- Primary Badges -->
   <p>
     <a href="https://www.npmjs.com/package/@angularai/core"><img src="https://img.shields.io/npm/v/@angularai/core.svg?style=for-the-badge&logo=npm&logoColor=white&color=CB3837" alt="npm version"></a>
+    <a href="https://www.npmjs.com/package/@angularai/core"><img src="https://img.shields.io/npm/dm/@angularai/core.svg?style=for-the-badge&logo=npm&logoColor=white&color=blue" alt="npm downloads"></a>
     <a href="https://github.com/reachbrt/angularai/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/@angularai/core.svg?style=for-the-badge&color=green" alt="MIT License"></a>
     <a href="https://github.com/reachbrt/angularai/stargazers"><img src="https://img.shields.io/github/stars/reachbrt/angularai?style=for-the-badge&logo=github&color=yellow" alt="GitHub Stars"></a>
     <a href="https://github.com/reachbrt/angularai/network/members"><img src="https://img.shields.io/github/forks/reachbrt/angularai?style=for-the-badge&logo=github&color=blue" alt="GitHub Forks"></a>
@@ -25,6 +26,7 @@
 
   <!-- Quick Links -->
   <p>
+    <a href="https://angularai.netlify.app"><img src="https://img.shields.io/badge/🎯_Live_Demo-View-FF6B6B?style=for-the-badge" alt="Live Demo"></a>
     <a href="#-quick-start"><img src="https://img.shields.io/badge/⚡_Quick_Start-Begin-95E1D3?style=for-the-badge" alt="Quick Start"></a>
     <a href="#-component-packages"><img src="https://img.shields.io/badge/📦_Packages-View-4ECDC4?style=for-the-badge" alt="Packages"></a>
     <a href="https://github.com/reachbrt/angularai/issues/new"><img src="https://img.shields.io/badge/🐛_Report_Bug-Submit-F7B731?style=for-the-badge" alt="Report Bug"></a>
@@ -429,15 +431,29 @@ ng test
 
 ---
 
+## 🎯 See It In Action
+
+<div align="center">
+  <p>
+    <a href="https://angularai.netlify.app"><img src="https://img.shields.io/badge/🚀_Live_Demo-angularai.netlify.app-FF6B6B?style=for-the-badge" alt="Live Demo"></a>
+  </p>
+  <p>
+    <em>Explore all 13 AI components with interactive demos and configuration options</em>
+  </p>
+</div>
+
+---
+
 ## 🔗 Related Projects
 
 <div align="center">
 
-| Framework | Repository | Status |
-|-----------|-----------|--------|
-| **Vue.js** | [@aivue](https://github.com/reachbrt/vueai) | ✅ Available |
-| **React** | [@reactai](https://github.com/reachbrt/reactai) | 💡 Planned |
-| **Svelte** | [@svelteai](https://github.com/reachbrt/svelteai) | 💡 Planned |
+| Framework | Repository | npm | Status |
+|-----------|-----------|-----|--------|
+| **Vue.js** | [@aivue](https://github.com/reachbrt/vueai) | [![npm](https://img.shields.io/npm/v/@anthropic-ai/vue.svg?style=flat-square)](https://www.npmjs.com/package/@anthropic-ai/vue) | ✅ Available |
+| **React** | [@anthropic-ai/react](https://github.com/reachbrt/reactai) | [![npm](https://img.shields.io/npm/v/@anthropic-ai/react.svg?style=flat-square)](https://www.npmjs.com/package/@anthropic-ai/react) | ✅ Available |
+| **Angular** | [@angularai](https://github.com/reachbrt/angularai) | [![npm](https://img.shields.io/npm/v/@angularai/core.svg?style=flat-square)](https://www.npmjs.com/package/@angularai/core) | ✅ Available |
+| **Svelte** | [@svelteai](https://github.com/reachbrt/svelteai) | - | 💡 Planned |
 
 </div>
 
